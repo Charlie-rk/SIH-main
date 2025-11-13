@@ -1,0 +1,1280 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "type": "community_engagement",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-11-10",
+      "location": { "lat": 20.2961, "lng": 85.8245 },
+      "summary": "Met with park dept. re: lighting at XYZ Park, Bhubaneswar."
+    },
+    {
+      "id": 2,
+      "type": "citizen_commendation",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-11-09",
+      "location": { "lat": 20.2761, "lng": 85.8045 },
+      "source": "AI_Sentiment_Analyzer",
+      "summary": "Email from citizen praising officer's help with lost child."
+    },
+    {
+      "id": 3,
+      "type": "btc_nomination",
+      "officer": "R. Chen (ID 552)",
+      "date": "2025-11-11",
+      "location": { "lat": 20.2861, "lng": 85.8145 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: High Professionalism (De-escalation) detected."
+    },
+    {
+      "id": 4,
+      "type": "community_engagement",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-11-08",
+      "location": { "lat": 20.2661, "lng": 85.8145 },
+      "summary": "Hosted a 'Coffee with a Cop' event at local cafe in Saheed Nagar."
+    },
+    {
+      "id": 5,
+      "type": "citizen_commendation",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-11-07",
+      "location": { "lat": 20.2861, "lng": 85.8345 },
+      "source": "Citizen Call",
+      "summary": "Citizen called to praise Officer Kaur's handling of a lost pet."
+    },
+    {
+      "id": 6,
+      "type": "community_engagement",
+      "officer": "M. Patel (ID 112)",
+      "date": "2025-11-06",
+      "location": { "lat": 21.4705, "lng": 83.9804 },
+      "summary": "Conducted cyber-safety workshop at Sambalpur University."
+    },
+    {
+      "id": 7,
+      "type": "btc_nomination",
+      "officer": "S. Das (ID 225)",
+      "date": "2025-11-05",
+      "location": { "lat": 20.4625, "lng": 85.8833 },
+      "source": "Supervisor Nomination",
+      "summary": "Officer stayed 3 hours past shift to resolve a domestic dispute in Cuttack."
+    },
+    {
+      "id": 8,
+      "type": "community_engagement",
+      "officer": "P. Kumar (ID 631)",
+      "date": "2025-11-04",
+      "location": { "lat": 19.8136, "lng": 85.8312 },
+      "summary": "Attended neighborhood watch meeting in Puri."
+    },
+    {
+      "id": 9,
+      "type": "citizen_commendation",
+      "officer": "L. Murmu (ID 707)",
+      "date": "2025-11-03",
+      "location": { "lat": 22.2492, "lng": 84.8530 },
+      "source": "Social Media",
+      "summary": "Social media post thanking officer for help with a flat tire in Rourkela."
+    },
+    {
+      "id": 10,
+      "type": "community_engagement",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-11-02",
+      "location": { "lat": 20.2900, "lng": 85.8400 },
+      "summary": "Organized youth sports league event in Patia, Bhubaneswar."
+    },
+    {
+      "id": 11,
+      "type": "btc_nomination",
+      "officer": "R. Chen (ID 552)",
+      "date": "2025-11-01",
+      "location": { "lat": 20.2500, "lng": 85.8000 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: High Empathy detected in citizen call analysis."
+    },
+    {
+      "id": 12,
+      "type": "community_engagement",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-10-31",
+      "location": { "lat": 20.2700, "lng": 85.8420 },
+      "summary": "Distributed safety pamphlets at Bhubaneswar railway station."
+    },
+    {
+      "id": 13,
+      "type": "citizen_commendation",
+      "officer": "M. Patel (ID 112)",
+      "date": "2025-10-30",
+      "location": { "lat": 21.4650, "lng": 83.9700 },
+      "source": "Citizen Call",
+      "summary": "Citizen praised quick response to noise complaint in Sambalpur."
+    },
+    {
+      "id": 14,
+      "type": "community_engagement",
+      "officer": "S. Das (ID 225)",
+      "date": "2025-10-29",
+      "location": { "lat": 20.4700, "lng": 85.8700 },
+      "summary": "Met with local shop owners in Cuttack about theft prevention."
+    },
+    {
+      "id": 15,
+      "type": "btc_nomination",
+      "officer": "P. Kumar (ID 631)",
+      "date": "2025-10-28",
+      "location": { "lat": 19.8000, "lng": 85.8200 },
+      "source": "Life-Saving Award",
+      "summary": "Administered CPR on-scene at Puri beach, saving a tourist."
+    },
+    {
+      "id": 16,
+      "type": "citizen_commendation",
+      "officer": "L. Murmu (ID 707)",
+      "date": "2025-10-27",
+      "location": { "lat": 22.2400, "lng": 84.8500 },
+      "source": "AI_Sentiment_Analyzer",
+      "summary": "Letter from tourist praising officer's professionalism in Rourkela."
+    },
+    {
+      "id": 17,
+      "type": "community_engagement",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-10-26",
+      "location": { "lat": 20.2811, "lng": 85.8315 },
+      "summary": "School visit to discuss traffic safety with students."
+    },
+    {
+      "id": 18,
+      "type": "btc_nomination",
+      "officer": "R. Chen (ID 552)",
+      "date": "2025-10-25",
+      "location": { "lat": 20.2621, "lng": 85.8015 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: Professionalism + Citizen Gratitude detected in transcript."
+    },
+    {
+      "id": 19,
+      "type": "community_engagement",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-10-24",
+      "location": { "lat": 18.8118, "lng": 82.7169 },
+      "summary": "Community policing meet in Koraput."
+    },
+    {
+      "id": 20,
+      "type": "citizen_commendation",
+      "officer": "S. Das (ID 225)",
+      "date": "2025-10-23",
+      "location": { "lat": 20.4630, "lng": 85.8840 },
+      "source": "Citizen Call",
+      "summary": "Elderly citizen called to thank officer for helping them cross a busy road in Cuttack."
+    },
+    {
+      "id": 21,
+      "type": "community_engagement",
+      "officer": "M. Patel (ID 112)",
+      "date": "2025-11-10",
+      "location": { "lat": 21.4700, "lng": 83.9800 },
+      "summary": "Held security briefing for bank managers in Sambalpur."
+    },
+    {
+      "id": 22,
+      "type": "btc_nomination",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-11-12",
+      "location": { "lat": 20.3000, "lng": 85.8300 },
+      "source": "Supervisor Nomination",
+      "summary": "Successfully de-escalated a public disturbance at Patia Square."
+    },
+    {
+      "id": 23,
+      "type": "community_engagement",
+      "officer": "P. Kumar (ID 631)",
+      "date": "2025-10-22",
+      "location": { "lat": 19.8050, "lng": 85.8250 },
+      "summary": "Liaised with temple security force for crowd management in Puri."
+    },
+    {
+      "id": 24,
+      "type": "citizen_commendation",
+      "officer": "R. Chen (ID 552)",
+      "date": "2025-10-21",
+      "location": { "lat": 20.2750, "lng": 85.8150 },
+      "source": "AI_Sentiment_Analyzer",
+      "summary": "Positive email regarding lost wallet retrieval."
+    },
+    {
+      "id": 25,
+      "type": "community_engagement",
+      "officer": "L. Murmu (ID 707)",
+      "date": "2025-10-20",
+      "location": { "lat": 22.2500, "lng": 84.8600 },
+      "summary": "Inspected safety measures at Rourkela Steel Plant."
+    },
+    {
+      "id": 26,
+      "type": "btc_nomination",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-10-19",
+      "location": { "lat": 20.2800, "lng": 85.8450 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: High Professionalism (De-escalation) detected."
+    },
+    {
+      "id": 27,
+      "type": "citizen_commendation",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-10-18",
+      "location": { "lat": 20.2600, "lng": 85.8200 },
+      "source": "Citizen Call",
+      "summary": "Shop owner called to thank officer for quick response to shoplifting."
+    },
+    {
+      "id": 28,
+      "type": "community_engagement",
+      "officer": "S. Das (ID 225)",
+      "date": "2025-10-17",
+      "location": { "lat": 20.4800, "lng": 85.8900 },
+      "summary": "Conducted safety drill at SCB Medical College, Cuttack."
+    },
+    {
+      "id": 29,
+      "type": "community_engagement",
+      "officer": "M. Patel (ID 112)",
+      "date": "2025-10-16",
+      "location": { "lat": 21.4720, "lng": 83.9820 },
+      "summary": "Patrolled Hirakud Dam area during tourist season."
+    },
+    {
+      "id": 30,
+      "type": "btc_nomination",
+      "officer": "S. Das (ID 225)",
+      "date": "2025-10-15",
+      "location": { "lat": 20.4600, "lng": 85.8800 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: High Empathy detected in citizen call analysis."
+    },
+    {
+      "id": 31,
+      "type": "community_engagement",
+      "officer": "R. Chen (ID 552)",
+      "date": "2025-11-12",
+      "location": { "lat": 20.2912, "lng": 85.8205 },
+      "summary": "Attended meeting with city council on traffic management."
+    },
+    {
+      "id": 32,
+      "type": "citizen_commendation",
+      "officer": "P. Kumar (ID 631)",
+      "date": "2025-11-11",
+      "location": { "lat": 19.8106, "lng": 85.8302 },
+      "source": "AI_Sentiment_Analyzer",
+      "summary": "Email from hotel manager praising officer's handling of a rowdy guest."
+    },
+    {
+      "id": 33,
+      "type": "community_engagement",
+      "officer": "L. Murmu (ID 707)",
+      "date": "2025-11-09",
+      "location": { "lat": 22.2450, "lng": 84.8550 },
+      "summary": "Visited tribal community center in Rourkela."
+    },
+    {
+      "id": 34,
+      "type": "btc_nomination",
+      "officer": "M. Patel (ID 112)",
+      "date": "2025-11-08",
+      "location": { "lat": 21.4685, "lng": 83.9754 },
+      "source": "Supervisor Nomination",
+      "summary": "Officer rescued a family from a flash flood near Sambalpur."
+    },
+    {
+      "id": 35,
+      "type": "citizen_commendation",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-11-07",
+      "location": { "lat": 20.2801, "lng": 85.8401 },
+      "source": "Citizen Call",
+      "summary": "Student called to thank officer for finding their lost laptop."
+    },
+    {
+      "id": 36,
+      "type": "community_engagement",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-11-06",
+      "location": { "lat": 20.2711, "lng": 85.8111 },
+      "summary": "Held 'Know Your Rights' session at a local women's college."
+    },
+    {
+      "id": 37,
+      "type": "community_engagement",
+      "officer": "S. Das (ID 225)",
+      "date": "2025-11-05",
+      "location": { "lat": 20.4655, "lng": 85.8855 },
+      "summary": "Organized blood donation camp with Cuttack police force."
+    },
+    {
+      "id": 38,
+      "type": "btc_nomination",
+      "officer": "R. Chen (ID 552)",
+      "date": "2025-11-04",
+      "location": { "lat": 20.2555, "lng": 85.8055 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: Professionalism + Citizen Gratitude detected."
+    },
+    {
+      "id": 39,
+      "type": "citizen_commendation",
+      "officer": "L. Murmu (ID 707)",
+      "date": "2025-11-03",
+      "location": { "lat": 22.2422, "lng": 84.8522 },
+      "source": "Social Media",
+      "summary": "Post praising officer for helping an injured animal."
+    },
+    {
+      "id": 40,
+      "type": "community_engagement",
+      "officer": "P. Kumar (ID 631)",
+      "date": "2025-11-02",
+      "location": { "lat": 19.8156, "lng": 85.8352 },
+      "summary": "Safety briefing for all hotel owners in Puri."
+    },
+    {
+      "id": 41,
+      "type": "community_engagement",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-11-01",
+      "location": { "lat": 20.3100, "lng": 85.8300 },
+      "summary": "Met with Infocity IT park security heads on cyber threats."
+    },
+    {
+      "id": 42,
+      "type": "btc_nomination",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-10-31",
+      "location": { "lat": 20.2731, "lng": 85.8131 },
+      "source": "Supervisor Nomination",
+      "summary": "Convinced a distressed individual off a bridge."
+    },
+    {
+      "id": 43,
+      "type": "citizen_commendation",
+      "officer": "S. Das (ID 225)",
+      "date": "2025-10-30",
+      "location": { "lat": 20.4735, "lng": 85.8835 },
+      "source": "AI_Sentiment_Analyzer",
+      "summary": "Email from family: 'Officer Das was a great comfort during our crisis.'"
+    },
+    {
+      "id": 44,
+      "type": "community_engagement",
+      "officer": "M. Patel (ID 112)",
+      "date": "2025-10-29",
+      "location": { "lat": 21.4675, "lng": 83.9724 },
+      "summary": "Set up new police help desk at Sambalpur City station."
+    },
+    {
+      "id": 45,
+      "type": "community_engagement",
+      "officer": "R. Chen (ID 552)",
+      "date": "2025-10-28",
+      "location": { "lat": 20.2655, "lng": 85.8255 },
+      "summary": "Addressed BJB College on anti-drug campaign."
+    },
+    {
+      "id": 46,
+      "type": "btc_nomination",
+      "officer": "L. Murmu (ID 707)",
+      "date": "2025-10-27",
+      "location": { "lat": 22.2482, "lng": 84.8582 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: High Professionalism (De-escalation) detected."
+    },
+    {
+      "id": 47,
+      "type": "citizen_commendation",
+      "officer": "P. Kumar (ID 631)",
+      "date": "2025-10-26",
+      "location": { "lat": 19.8026, "lng": 85.8322 },
+      "source": "Citizen Call",
+      "summary": "Puri resident called to praise officer's fair handling of a dispute."
+    },
+    {
+      "id": 48,
+      "type": "community_engagement",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-10-25",
+      "location": { "lat": 20.2951, "lng": 85.8235 },
+      "summary": "Inspected bank security systems in Nayapalli."
+    },
+    {
+      "id": 49,
+      "type": "community_engagement",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-10-24",
+      "location": { "lat": 20.2781, "lng": 85.8181 },
+      "summary": "Conducted self-defense workshop for women."
+    },
+    {
+      "id": 50,
+      "type": "btc_nomination",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-10-23",
+      "location": { "lat": 20.2881, "lng": 85.8285 },
+      "source": "Supervisor Nomination",
+      "summary": "Identified and resolved a long-standing traffic bottleneck."
+    },
+    {
+      "id": 51,
+      "type": "citizen_commendation",
+      "officer": "M. Patel (ID 112)",
+      "date": "2025-11-12",
+      "location": { "lat": 21.4600, "lng": 83.9700 },
+      "source": "AI_Sentiment_Analyzer",
+      "summary": "Positive email from student: 'Officer Patel's cyber-safety class was eye-opening.'"
+    },
+    {
+      "id": 52,
+      "type": "community_engagement",
+      "officer": "S. Das (ID 225)",
+      "date": "2025-11-13",
+      "location": { "lat": 20.4715, "lng": 85.8815 },
+      "summary": "Patrolled Barabati Stadium area during a match."
+    },
+    {
+      "id": 53,
+      "type": "btc_nomination",
+      "officer": "P. Kumar (ID 631)",
+      "date": "2025-11-14",
+      "location": { "lat": 19.8006, "lng": 85.8302 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: High Empathy detected in call with distressed tourist."
+    },
+    {
+      "id": 54,
+      "type": "community_engagement",
+      "officer": "R. Chen (ID 552)",
+      "date": "2025-11-15",
+      "location": { "lat": 20.2605, "lng": 85.8205 },
+      "summary": "Met with hospital admin about emergency protocols."
+    },
+    {
+      "id": 55,
+      "type": "citizen_commendation",
+      "officer": "L. Murmu (ID 707)",
+      "date": "2025-11-16",
+      "location": { "lat": 22.2402, "lng": 84.8502 },
+      "source": "Citizen Call",
+      "summary": "Factory foreman called to praise officer's theft prevention advice."
+    },
+    {
+      "id": 56,
+      "type": "community_engagement",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-11-17",
+      "location": { "lat": 20.2921, "lng": 85.8225 },
+      "summary": "Monthly review meeting with local business association."
+    },
+    {
+      "id": 57,
+      "type": "btc_nomination",
+      "officer": "S. Das (ID 225)",
+      "date": "2025-11-18",
+      "location": { "lat": 20.4625, "lng": 85.8825 },
+      "source": "Life-Saving Award",
+      "summary": "Rescued 2 children from a building fire in Cuttack before fire dept arrived."
+    },
+    {
+      "id": 58,
+      "type": "citizen_commendation",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-11-19",
+      "location": { "lat": 20.2721, "lng": 85.8121 },
+      "source": "AI_Sentiment_Analyzer",
+      "summary": "Positive feedback from women's shelter on Officer Kaur's empathy."
+    },
+    {
+      "id": 59,
+      "type": "community_engagement",
+      "officer": "M. Patel (ID 112)",
+      "date": "2025-11-20",
+      "location": { "lat": 21.4625, "lng": 83.9725 },
+      "summary": "Set up traffic checkpoints near key intersections in Sambalpur."
+    },
+    {
+      "id": 60,
+      "type": "btc_nomination",
+      "officer": "R. Chen (ID 552)",
+      "date": "2025-11-21",
+      "location": { "lat": 20.2525, "lng": 85.8025 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: High Professionalism (De-escalation) detected."
+    },
+    {
+      "id": 61,
+      "type": "community_engagement",
+      "officer": "T. Behera (ID 801)",
+      "date": "2025-11-20",
+      "location": { "lat": 21.4900, "lng": 86.9300 },
+      "summary": "Conducted coastal security drill with marine police in Balasore."
+    },
+    {
+      "id": 62,
+      "type": "citizen_commendation",
+      "officer": "S. Naik (ID 123)",
+      "date": "2025-11-19",
+      "location": { "lat": 19.3100, "lng": 84.7900 },
+      "source": "Citizen Call",
+      "summary": "Berhampur resident thanks officer for locating missing scooter."
+    },
+    {
+      "id": 63,
+      "type": "community_engagement",
+      "officer": "A. Mohanty (ID 567)",
+      "date": "2025-11-18",
+      "location": { "lat": 20.8500, "lng": 86.3300 },
+      "summary": "Met with temple administrators in Jajpur about crowd control."
+    },
+    {
+      "id": 64,
+      "type": "btc_nomination",
+      "officer": "T. Behera (ID 801)",
+      "date": "2025-11-17",
+      "location": { "lat": 21.4950, "lng": 86.9350 },
+      "source": "Supervisor Nomination",
+      "summary": "Officer waded into floodwaters in Balasore to rescue an elderly couple."
+    },
+    {
+      "id": 65,
+      "type": "community_engagement",
+      "officer": "S. Naik (ID 123)",
+      "date": "2025-11-16",
+      "location": { "lat": 19.3150, "lng": 84.7950 },
+      "summary": "Addressed silk city merchants association in Berhampur."
+    },
+    {
+      "id": 66,
+      "type": "citizen_commendation",
+      "officer": "A. Mohanty (ID 567)",
+      "date": "2025-11-15",
+      "location": { "lat": 20.8550, "lng": 86.3350 },
+      "source": "AI_Sentiment_Analyzer",
+      "summary": "Positive email from pilgrim: 'Officer Mohanty was so helpful at Jajpur temple.'"
+    },
+    {
+      "id": 67,
+      "type": "community_engagement",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-11-14",
+      "location": { "lat": 20.2830, "lng": 85.8330 },
+      "summary": "Inspected bank ATMs for skimmers in Chandrasekharpur."
+    },
+    {
+      "id": 68,
+      "type": "btc_nomination",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-11-13",
+      "location": { "lat": 20.2730, "lng": 85.8130 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: High Empathy detected in call with harassment victim."
+    },
+    {
+      "id": 69,
+      "type": "community_engagement",
+      "officer": "R. Chen (ID 552)",
+      "date": "2025-11-12",
+      "location": { "lat": 20.2630, "lng": 85.8230 },
+      "summary": "Coordinated traffic plan for a festival at Lingaraj Temple."
+    },
+    {
+      "id": 70,
+      "type": "citizen_commendation",
+      "officer": "M. Patel (ID 112)",
+      "date": "2025-11-11",
+      "location": { "lat": 21.4730, "lng": 83.9830 },
+      "source": "Social Media",
+      "summary": "Sambalpur student praises officer's clear advice at workshop."
+    },
+    {
+      "id": 71,
+      "type": "community_engagement",
+      "officer": "S. Das (ID 225)",
+      "date": "2025-11-10",
+      "location": { "lat": 20.4630, "lng": 85.8830 },
+      "summary": "Held awareness program on bank fraud in Cuttack."
+    },
+    {
+      "id": 72,
+      "type": "btc_nomination",
+      "officer": "S. Naik (ID 123)",
+      "date": "2025-11-09",
+      "location": { "lat": 19.3130, "lng": 84.7930 },
+      "source": "Supervisor Nomination",
+      "summary": "Officer uncovered a local cheating ring in Berhampur."
+    },
+    {
+      "id": 73,
+      "type": "community_engagement",
+      "officer": "P. Kumar (ID 631)",
+      "date": "2025-11-08",
+      "location": { "lat": 19.8130, "lng": 85.8330 },
+      "summary": "Conducted security audit for Jagannath Temple, Puri."
+    },
+    {
+      "id": 74,
+      "type": "citizen_commendation",
+      "officer": "T. Behera (ID 801)",
+      "date": "2025-11-07",
+      "location": { "lat": 21.4930, "lng": 86.9330 },
+      "source": "Citizen Call",
+      "summary": "Fisherman from Balasore calls to thank officer for storm warning."
+    },
+    {
+      "id": 75,
+      "type": "community_engagement",
+      "officer": "L. Murmu (ID 707)",
+      "date": "2025-11-06",
+      "location": { "lat": 22.2430, "lng": 84.8530 },
+      "summary": "Organized a recruitment drive for tribal youth in Rourkela."
+    },
+    {
+      "id": 76,
+      "type": "btc_nomination",
+      "officer": "A. Mohanty (ID 567)",
+      "date": "2025-11-05",
+      "location": { "lat": 20.8530, "lng": 86.3330 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: High Professionalism (De-escalation) in land dispute case."
+    },
+    {
+      "id": 77,
+      "type": "community_engagement",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-11-04",
+      "location": { "lat": 20.2930, "lng": 85.8230 },
+      "summary": "Cyber security briefing for senior citizens in Nayapalli."
+    },
+    {
+      "id": 78,
+      "type": "citizen_commendation",
+      "officer": "R. Chen (ID 552)",
+      "date": "2025-11-03",
+      "location": { "lat": 20.2630, "lng": 85.8130 },
+      "source": "AI_Sentiment_Analyzer",
+      "summary": "Email: 'Officer Chen was respectful and efficient.'"
+    },
+    {
+      "id": 79,
+      "type": "community_engagement",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-11-02",
+      "location": { "lat": 20.2730, "lng": 85.8230 },
+      "summary": "Addressed residents of a housing society on theft prevention."
+    },
+    {
+      "id": 80,
+      "type": "btc_nomination",
+      "officer": "M. Patel (ID 112)",
+      "date": "2025-11-01",
+      "location": { "lat": 21.4730, "lng": 83.9830 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: Professionalism + Citizen Gratitude detected in Sambalpur."
+    },
+    {
+      "id": 81,
+      "type": "citizen_commendation",
+      "officer": "S. Das (ID 225)",
+      "date": "2025-10-31",
+      "location": { "lat": 20.4680, "lng": 85.8880 },
+      "source": "Social Media",
+      "summary": "Cuttack citizen praises quick recovery of stolen bike."
+    },
+    {
+      "id": 82,
+      "type": "community_engagement",
+      "officer": "S. Naik (ID 123)",
+      "date": "2025-10-30",
+      "location": { "lat": 19.3080, "lng": 84.7880 },
+      "summary": "Meeting with university students in Berhampur on drug abuse."
+    },
+    {
+      "id": 83,
+      "type": "community_engagement",
+      "officer": "P. Kumar (ID 631)",
+      "date": "2025-10-29",
+      "location": { "lat": 19.8080, "lng": 85.8280 },
+      "summary": "Reviewed coastal security measures with fishermen in Puri."
+    },
+    {
+      "id": 84,
+      "type": "btc_nomination",
+      "officer": "T. Behera (ID 801)",
+      "date": "2025-10-28",
+      "location": { "lat": 21.4980, "lng": 86.9380 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: High Empathy detected in call from Balasore."
+    },
+    {
+      "id": 85,
+      "type": "citizen_commendation",
+      "officer": "A. Mohanty (ID 567)",
+      "date": "2025-10-27",
+      "location": { "lat": 20.8580, "lng": 86.3380 },
+      "source": "Citizen Call",
+      "summary": "Jajpur resident thanks officer for resolving a long-standing noise issue."
+    },
+    {
+      "id": 86,
+      "type": "community_engagement",
+      "officer": "L. Murmu (ID 707)",
+      "date": "2025-10-26",
+      "location": { "lat": 22.2480, "lng": 84.8580 },
+      "summary": "Set up a booth at Rourkela trade fair for community outreach."
+    },
+    {
+      "id": 87,
+      "type": "community_engagement",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-10-25",
+      "location": { "lat": 20.2880, "lng": 85.8380 },
+      "summary": "Patrolled market area in Chandrasekharpur during festival."
+    },
+    {
+      "id": 88,
+      "type": "btc_nomination",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-10-24",
+      "location": { "lat": 20.2780, "lng": 85.8180 },
+      "source": "Supervisor Nomination",
+      "summary": "Officer Kaur's community policing initiative led to 20% drop in petty theft."
+    },
+    {
+      "id": 89,
+      "type": "citizen_commendation",
+      "officer": "R. Chen (ID 552)",
+      "date": "2025-10-23",
+      "location": { "lat": 20.2680, "lng": 85.8280 },
+      "source": "Citizen Call",
+      "summary": "Commuter praises Officer Chen's efficient handling of a traffic accident."
+    },
+    {
+      "id": 90,
+      "type": "community_engagement",
+      "officer": "M. Patel (ID 112)",
+      "date": "2025-10-22",
+      "location": { "lat": 21.4780, "lng": 83.9880 },
+      "summary": "Addressed Sambalpur Bar Association on new cyber laws."
+    },
+    {
+      "id": 91,
+      "type": "community_engagement",
+      "officer": "S. Das (ID 225)",
+      "date": "2025-10-21",
+      "location": { "lat": 20.4680, "lng": 85.8780 },
+      "summary": "Inspected silver filigree workshops in Cuttack for security."
+    },
+    {
+      "id": 92,
+      "type": "btc_nomination",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-11-21",
+      "location": { "lat": 20.3010, "lng": 85.8310 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: High Professionalism (De-escalation) detected."
+    },
+    {
+      "id": 93,
+      "type": "citizen_commendation",
+      "officer": "P. Kumar (ID 631)",
+      "date": "2025-11-20",
+      "location": { "lat": 19.8110, "lng": 85.8310 },
+      "source": "Social Media",
+      "summary": "Tourist in Puri praises officer for respectful and helpful attitude."
+    },
+    {
+      "id": 94,
+      "type": "community_engagement",
+      "officer": "S. Naik (ID 123)",
+      "date": "2025-11-19",
+      "location": { "lat": 19.3110, "lng": 84.7910 },
+      "summary": "Conducted safety awareness for Gopalpur port staff."
+    },
+    {
+      "id": 95,
+      "type": "community_engagement",
+      "officer": "T. Behera (ID 801)",
+      "date": "2025-11-18",
+      "location": { "lat": 21.4910, "lng": 86.9310 },
+      "summary": "Met with fishermen in Balasore about illegal trawling."
+    },
+    {
+      "id": 96,
+      "type": "btc_nomination",
+      "officer": "L. Murmu (ID 707)",
+      "date": "2025-11-17",
+      "location": { "lat": 22.2410, "lng": 84.8510 },
+      "source": "Supervisor Nomination",
+      "summary": "Officer Murmu's mentorship program for at-risk youth praised."
+    },
+    {
+      "id": 97,
+      "type": "citizen_commendation",
+      "officer": "A. Mohanty (ID 567)",
+      "date": "2025-11-16",
+      "location": { "lat": 20.8510, "lng": 86.3310 },
+      "source": "AI_Sentiment_Analyzer",
+      "summary": "Positive email re: Officer Mohanty's quick action on a land dispute."
+    },
+    {
+      "id": 98,
+      "type": "community_engagement",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-11-15",
+      "location": { "lat": 20.2710, "lng": 85.8110 },
+      "summary": "Inspected security at women's hostels in Bhubaneswar."
+    },
+    {
+      "id": 99,
+      "type": "community_engagement",
+      "officer": "R. Chen (ID 552)",
+      "date": "2025-11-14",
+      "location": { "lat": 20.2610, "lng": 85.8210 },
+      "summary": "Traffic management planning for new mall opening."
+    },
+    {
+      "id": 100,
+      "type": "btc_nomination",
+      "officer": "S. Das (ID 225)",
+      "date": "2025-11-13",
+      "location": { "lat": 20.4710, "lng": 85.8810 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: High Empathy detected in call from Cuttack."
+    },
+    {
+      "id": 101,
+      "type": "citizen_commendation",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-11-12",
+      "location": { "lat": 20.2910, "lng": 85.8210 },
+      "source": "Social Media",
+      "summary": "Local blogger praised Officer Smith for community meeting."
+    },
+    {
+      "id": 102,
+      "type": "community_engagement",
+      "officer": "M. Patel (ID 112)",
+      "date": "2025-11-11",
+      "location": { "lat": 21.4710, "lng": 83.9810 },
+      "summary": "Patrolled university campus during exams in Sambalpur."
+    },
+    {
+      "id": 103,
+      "type": "community_engagement",
+      "officer": "S. Naik (ID 123)",
+      "date": "2025-11-10",
+      "location": { "lat": 19.3120, "lng": 84.7920 },
+      "summary": "Safety brief for shopkeepers at Berhampur market."
+    },
+    {
+      "id": 104,
+      "type": "btc_nomination",
+      "officer": "P. Kumar (ID 631)",
+      "date": "2025-11-09",
+      "location": { "lat": 19.8120, "lng": 85.8320 },
+      "source": "Supervisor Nomination",
+      "summary": "Officer Kumar designed a new, efficient tourist safety plan for Puri."
+    },
+    {
+      "id": 105,
+      "type": "citizen_commendation",
+      "officer": "T. Behera (ID 801)",
+      "date": "2025-11-08",
+      "location": { "lat": 21.4920, "lng": 86.9320 },
+      "source": "AI_Sentiment_Analyzer",
+      "summary": "Positive feedback from Balasore resident on reduced noise."
+    },
+    {
+      "id": 106,
+      "type": "community_engagement",
+      "officer": "A. Mohanty (ID 567)",
+      "date": "2025-11-07",
+      "location": { "lat": 20.8520, "lng": 86.3320 },
+      "summary": "Monitored Jajpur river ghats during festival."
+    },
+    {
+      "id": 107,
+      "type": "community_engagement",
+      "officer": "L. Murmu (ID 707)",
+      "date": "2025-11-06",
+      "location": { "lat": 22.2420, "lng": 84.8520 },
+      "summary": "Addressed steel plant workers on theft prevention."
+    },
+    {
+      "id": 108,
+      "type": "btc_nomination",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-11-05",
+      "location": { "lat": 20.2820, "lng": 85.8320 },
+      "source": "Life-Saving Award",
+      "summary": "Performed Heimlich maneuver on choking citizen in restaurant."
+    },
+    {
+      "id": 109,
+      "type": "citizen_commendation",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-11-04",
+      "location": { "lat": 20.2720, "lng": 85.8120 },
+      "source": "Citizen Call",
+      "summary": "Caller praises Officer Kaur's compassionate handling of a missing person report."
+    },
+    {
+      "id": 110,
+      "type": "community_engagement",
+      "officer": "R. Chen (ID 552)",
+      "date": "2025-11-03",
+      "location": { "lat": 20.2620, "lng": 85.8220 },
+      "summary": "Set up traffic diversion for a political rally."
+    },
+    {
+      "id": 111,
+      "type": "community_engagement",
+      "officer": "S. Das (ID 225)",
+      "date": "2025-11-02",
+      "location": { "lat": 20.4720, "lng": 85.8820 },
+      "summary": "Met with boat owners in Cuttack about river safety."
+    },
+    {
+      "id": 112,
+      "type": "btc_nomination",
+      "officer": "M. Patel (ID 112)",
+      "date": "2025-11-01",
+      "location": { "lat": 21.4720, "lng": 83.9820 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: High Professionalism (De-escalation) in Sambalpur."
+    },
+    {
+      "id": 113,
+      "type": "citizen_commendation",
+      "officer": "S. Naik (ID 123)",
+      "date": "2025-10-31",
+      "location": { "lat": 19.3130, "lng": 84.7930 },
+      "source": "AI_Sentiment_Analyzer",
+      "summary": "Email: 'Officer Naik's presence in Berhampur market is very reassuring.'"
+    },
+    {
+      "id": 114,
+      "type": "community_engagement",
+      "officer": "P. Kumar (ID 631)",
+      "date": "2025-10-30",
+      "location": { "lat": 19.8130, "lng": 85.8330 },
+      "summary": "Patrolled Puri beach during high tide warning."
+    },
+    {
+      "id": 115,
+      "type": "community_engagement",
+      "officer": "T. Behera (ID 801)",
+      "date": "2025-10-29",
+      "location": { "lat": 21.4930, "lng": 86.9330 },
+      "summary": "Inspected fish markets in Balasore for illegal trade."
+    },
+    {
+      "id": 116,
+      "type": "btc_nomination",
+      "officer": "A. Mohanty (ID 567)",
+      "date": "2025-10-28",
+      "location": { "lat": 20.8530, "lng": 86.3330 },
+      "source": "Supervisor Nomination",
+      "summary": "Officer Mohanty's initiative to digitize old records saved 100+ hours."
+    },
+    {
+      "id": 117,
+      "type": "citizen_commendation",
+      "officer": "L. Murmu (ID 707)",
+      "date": "2025-10-27",
+      "location": { "lat": 22.2430, "lng": 84.8530 },
+      "source": "Citizen Call",
+      "summary": "Rourkela resident thanks officer for solving a neighborhood dispute."
+    },
+    {
+      "id": 118,
+      "type": "community_engagement",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-10-26",
+      "location": { "lat": 20.2930, "lng": 85.8230 },
+      "summary": "Conducted drill at ISKCON temple, Bhubaneswar."
+    },
+    {
+      "id": 119,
+      "type": "community_engagement",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-10-25",
+      "location": { "lat": 20.2730, "lng": 85.8130 },
+      "summary": "Meeting with local auto-rickshaw union."
+    },
+    {
+      "id": 120,
+      "type": "btc_nomination",
+      "officer": "R. Chen (ID 552)",
+      "date": "2025-10-24",
+      "location": { "lat": 20.2630, "lng": 85.8230 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: High Empathy detected in call with elderly citizen."
+    },
+    {
+      "id": 121,
+      "type": "citizen_commendation",
+      "officer": "S. Das (ID 225)",
+      "date": "2025-11-21",
+      "location": { "lat": 20.4730, "lng": 85.8830 },
+      "source": "AI_Sentiment_Analyzer",
+      "summary": "Email from Cuttack shop owner: 'Officer Das's patrols are working.'"
+    },
+    {
+      "id": 122,
+      "type": "community_engagement",
+      "officer": "M. Patel (ID 112)",
+      "date": "2025-11-20",
+      "location": { "lat": 21.4730, "lng": 83.9830 },
+      "summary": "Addressed student housing concerns in Sambalpur."
+    },
+    {
+      "id": 123,
+      "type": "community_engagement",
+      "officer": "S. Naik (ID 123)",
+      "date": "2025-11-19",
+      "location": { "lat": 19.3140, "lng": 84.7940 },
+      "summary": "Berhampur University campus security review."
+    },
+    {
+      "id": 124,
+      "type": "btc_nomination",
+      "officer": "T. Behera (ID 801)",
+      "date": "2025-11-18",
+      "location": { "lat": 21.4940, "lng": 86.9340 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: De-escalation + Professionalism in Balasore."
+    },
+    {
+      "id": 125,
+      "type": "citizen_commendation",
+      "officer": "P. Kumar (ID 631)",
+      "date": "2025-11-17",
+      "location": { "lat": 19.8140, "lng": 85.8340 },
+      "source": "Citizen Call",
+      "summary": "Puri hotel owner thanks officer for handling a difficult situation."
+    },
+    {
+      "id": 126,
+      "type": "community_engagement",
+      "officer": "A. Mohanty (ID 567)",
+      "date": "2025-11-16",
+      "location": { "lat": 20.8540, "lng": 86.3340 },
+      "summary": "Conducted checks at Jajpur industrial parks."
+    },
+    {
+      "id": 127,
+      "type": "community_engagement",
+      "officer": "L. Murmu (ID 707)",
+      "date": "2025-11-15",
+      "location": { "lat": 22.2440, "lng": 84.8540 },
+      "summary": "Cyber awareness talk at Rourkela Institute of Management."
+    },
+    {
+      "id": 128,
+      "type": "btc_nomination",
+      "officer": "S. Naik (ID 123)",
+      "date": "2025-11-14",
+      "location": { "lat": 19.3145, "lng": 84.7945 },
+      "source": "Life-Saving Award",
+      "summary": "Officer Naik rescued a swimmer caught in a riptide at Gopalpur."
+    },
+    {
+      "id": 129,
+      "type": "citizen_commendation",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-11-13",
+      "location": { "lat": 20.2940, "lng": 85.8240 },
+      "source": "AI_Sentiment_Analyzer",
+      "summary": "Positive email: 'Officer Smith's cyber security talk for seniors was excellent.'"
+    },
+    {
+      "id": 130,
+      "type": "community_engagement",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-11-12",
+      "location": { "lat": 20.2740, "lng": 85.8140 },
+      "summary": "Patrolled near banks during high-traffic pension week."
+    },
+    {
+      "id": 131,
+      "type": "community_engagement",
+      "officer": "R. Chen (ID 552)",
+      "date": "2025-11-11",
+      "location": { "lat": 20.2640, "lng": 85.8240 },
+      "summary": "Liaised with fire department for new safety protocols."
+    },
+    {
+      "id": 132,
+      "type": "btc_nomination",
+      "officer": "S. Das (ID 225)",
+      "date": "2025-11-10",
+      "location": { "lat": 20.4740, "lng": 85.8840 },
+      "source": "Supervisor Nomination",
+      "summary": "Officer Das organized a successful campaign against counterfeit goods."
+    },
+    {
+      "id": 133,
+      "type": "citizen_commendation",
+      "officer": "M. Patel (ID 112)",
+      "date": "2025-11-09",
+      "location": { "lat": 21.4740, "lng": 83.9840 },
+      "source": "Citizen Call",
+      "summary": "Sambalpur shop owner thanks officer for patrol consistency."
+    },
+    {
+      "id": 134,
+      "type": "community_engagement",
+      "officer": "P. Kumar (ID 631)",
+      "date": "2025-11-08",
+      "location": { "lat": 19.8140, "lng": 85.8340 },
+      "summary": "Conducted safety audit of hotels in Puri."
+    },
+    {
+      "id": 135,
+      "type": "community_engagement",
+      "officer": "S. Naik (ID 123)",
+      "date": "2025-11-07",
+      "location": { "lat": 19.3150, "lng": 84.7950 },
+      "summary": "Community meeting in Berhampur fishing village."
+    },
+    {
+      "id": 136,
+      "type": "btc_nomination",
+      "officer": "T. Behera (ID 801)",
+      "date": "2025-11-06",
+      "location": { "lat": 21.4950, "lng": 86.9350 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: High Empathy in call with stranded driver."
+    },
+    {
+      "id": 137,
+      "type": "citizen_commendation",
+      "officer": "A. Mohanty (ID 567)",
+      "date": "2025-11-05",
+      "location": { "lat": 20.8550, "lng": 86.3350 },
+      "source": "Social Media",
+      "summary": "Jajpur resident praises Officer Mohanty's fair mediation."
+    },
+    {
+      "id": 138,
+      "type": "community_engagement",
+      "officer": "L. Murmu (ID 707)",
+      "date": "2025-11-04",
+      "location": { "lat": 22.2450, "lng": 84.8550 },
+      "summary": "Held session on online safety for Rourkela parents."
+    },
+    {
+      "id": 139,
+      "type": "community_engagement",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-11-03",
+      "location": { "lat": 20.2950, "lng": 85.8250 },
+      "summary": "Meeting with apartment association presidents in Patia."
+    },
+    {
+      "id": 140,
+      "type": "btc_nomination",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-11-02",
+      "location": { "lat": 20.2750, "lng": 85.8150 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: Professionalism + Citizen Gratitude detected."
+    },
+    {
+      "id": 141,
+      "type": "citizen_commendation",
+      "officer": "R. Chen (ID 552)",
+      "date": "2025-11-01",
+      "location": { "lat": 20.2650, "lng": 85.8250 },
+      "source": "Citizen Call",
+      "summary": "Commuter thanks Officer Chen for managing a difficult traffic jam."
+    },
+    {
+      "id": 142,
+      "type": "community_engagement",
+      "officer": "S. Das (ID 225)",
+      "date": "2025-10-31",
+      "location": { "lat": 20.4750, "lng": 85.8850 },
+      "summary": "Finalized security plan for upcoming Bali Jatra in Cuttack."
+    },
+    {
+      "id": 143,
+      "type": "community_engagement",
+      "officer": "M. Patel (ID 112)",
+      "date": "2025-10-30",
+      "location": { "lat": 21.4750, "lng": 83.9850 },
+      "summary": "Anti-ragging workshop at VSSUT, Sambalpur."
+    },
+    {
+      "id": 144,
+      "type": "btc_nomination",
+      "officer": "S. Naik (ID 123)",
+      "date": "2025-10-29",
+      "location": { "lat": 19.3160, "lng": 84.7960 },
+      "source": "Supervisor Nomination",
+      "summary": "Officer's investigation led to a major drug bust in Berhampur."
+    },
+    {
+      "id": 145,
+      "type": "citizen_commendation",
+      "officer": "P. Kumar (ID 631)",
+      "date": "2025-10-28",
+      "location": { "lat": 19.8160, "lng": 85.8360 },
+      "source": "AI_Sentiment_Analyzer",
+      "summary": "Positive email: 'Officer Kumar's presence makes Puri beach feel safe.'"
+    },
+    {
+      "id": 146,
+      "type": "community_engagement",
+      "officer": "T. Behera (ID 801)",
+      "date": "2025-10-27",
+      "location": { "lat": 21.4960, "lng": 86.9360 },
+      "summary": "Community meeting in Balasore fishing hamlet."
+    },
+    {
+      "id": 147,
+      "type": "community_engagement",
+      "officer": "A. Mohanty (ID 567)",
+      "date": "2025-10-26",
+      "location": { "lat": 20.8560, "lng": 86.3360 },
+      "summary": "Inspected highway dhabas for illegal activities in Jajpur."
+    },
+    {
+      "id": 148,
+      "type": "btc_nomination",
+      "officer": "L. Murmu (ID 707)",
+      "date": "2025-10-25",
+      "location": { "lat": 22.2460, "lng": 84.8560 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: High Empathy in call with laid-off factory worker."
+    },
+    {
+      "id": 149,
+      "type": "citizen_commendation",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-10-24",
+      "location": { "lat": 20.2960, "lng": 85.8260 },
+      "summary": "IT park security head thanks Officer Smith for proactive patrols."
+    },
+    {
+      "id": 150,
+      "type": "community_engagement",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-10-23",
+      "location": { "lat": 20.2760, "lng": 85.8160 },
+      "summary": "Final self-defense workshop of the quarter."
+    }
+  ]
+}

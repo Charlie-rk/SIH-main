@@ -1,18 +1,8 @@
 import React, { useState } from 'react';
+import { analyzeSentiment, analyzeTranscript } from '../services/API';
 
-// We will uncomment this when our backend is ready.
-// import { analyzeSentiment, analyzeTranscript } from '../services/api';
 
-/**
- * AIAnalyzer Component
- *
- * This provides the two "smart" tools for our demo:
- * 1. A sentiment analyzer for citizen feedback.
- * 2. A professionalism analyzer for body-cam transcripts.
- *
- * It uses a FAKED API call (setTimeout) for now,
- * so we can build the UI.
- */
+
 function AIAnalyzer() {
   // State for the Sentiment tool
   const [sentimentText, setSentimentText] = useState('');
@@ -28,66 +18,38 @@ function AIAnalyzer() {
    * --- SIMULATED API CALL 1 ---
    * Handles the submission for sentiment analysis.
    */
-  const handleSentimentSubmit = () => {
-    setIsSentLoading(true);
-    setSentimentResult(null);
+  const handleSentimentSubmit = async () => {
+  setIsSentLoading(true);
+  setSentimentResult(null);
 
-    // FAKE: Simulate a 1.5 second API call
-    setTimeout(() => {
-      // Based on a simple keyword check, return a mock result
-      const lowerText = sentimentText.toLowerCase();
-      let mockResult;
-      if (lowerText.includes('rude') || lowerText.includes('bad')) {
-        mockResult = { label: 'NEGATIVE', score: 0.92 };
-      } else {
-        mockResult = { label: 'POSITIVE', score: 0.98 };
-      }
-      
-      setSentimentResult(mockResult);
-      setIsSentLoading(false);
-    }, 1500);
+  try {
+    const data = await analyzeSentiment(sentimentText);
+    // expected shape: { label: 'POSITIVE'|'NEGATIVE', score: 0.xx }
+    setSentimentResult(data);
+  } catch (err) {
+    console.error('Sentiment API error', err);
+    setSentimentResult({ label: 'ERROR', score: 0 });
+  } finally {
+    setIsSentLoading(false);
+  }
+};
 
-    // REAL CALL (for later)
-    // analyzeSentiment(sentimentText)
-    //   .then(data => setSentimentResult(data))
-    //   .catch(err => console.error(err))
-    //   .finally(() => setIsSentLoading(false));
-  };
+// replace handleTranscriptSubmit with:
+const handleTranscriptSubmit = async () => {
+  setIsTransLoading(true);
+  setTranscriptResult(null);
 
-  /**
-   * --- SIMULATED API CALL 2 ---
-   * Handles the submission for transcript analysis.
-   */
-  const handleTranscriptSubmit = () => {
-    setIsTransLoading(true);
-    setTranscriptResult(null);
-
-    // FAKE: Simulate a 2 second API call
-    setTimeout(() => {
-      const lowerText = transcriptText.toLowerCase();
-      let mockResult = { tags: [] };
-
-      // Look for our keywords
-      if (lowerText.includes('i understand') || lowerText.includes('are you okay')) {
-        mockResult.tags.push('De-escalation');
-      }
-      if (lowerText.includes('thank you') || lowerText.includes('helpful')) {
-        mockResult.tags.push('Citizen Gratitude');
-      }
-      if (mockResult.tags.length === 0) {
-        mockResult.tags.push('Standard Procedure');
-      }
-      
-      setTranscriptResult(mockResult);
-      setIsTransLoading(false);
-    }, 2000);
-
-    // REAL CALL (for later)
-    // analyzeTranscript(transcriptText)
-    //   .then(data => setTranscriptResult(data))
-    //   .catch(err => console.error(err))
-    //   .finally(() => setIsTransLoading(false));
-  };
+  try {
+    const data = await analyzeTranscript(transcriptText);
+    // expected shape: { tags: [...] }
+    setTranscriptResult(data);
+  } catch (err) {
+    console.error('Transcript API error', err);
+    setTranscriptResult({ tags: ['Error contacting API'] });
+  } finally {
+    setIsTransLoading(false);
+  }
+};
 
   return (
     // Grid with 2 columns on medium screens, 1 on small
