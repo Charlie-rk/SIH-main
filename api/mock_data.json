@@ -1,0 +1,47 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "type": "community_engagement",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-11-10",
+      "location": { "lat": 20.2961, "lng": 85.8245 },
+      "summary": "Met with park dept. re: lighting at XYZ Park."
+    },
+    {
+      "id": 2,
+      "type": "citizen_commendation",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-11-09",
+      "location": { "lat": 20.2761, "lng": 85.8045 },
+      "source": "AI_Sentiment_Analyzer",
+      "summary": "Email from citizen praising officer's help with lost child."
+    },
+    {
+      "id": 3,
+      "type": "btc_nomination",
+      "officer": "R. Chen (ID 552)",
+      "date": "2025-11-11",
+      "location": { "lat": 20.2861, "lng": 85.8145 },
+      "source": "AI_Transcript_Analyzer",
+      "summary": "AI Flag: High Professionalism (De-escalation) detected."
+    },
+    {
+      "id": 4,
+      "type": "community_engagement",
+      "officer": "J. Smith (ID 405)",
+      "date": "2025-11-08",
+      "location": { "lat": 20.2661, "lng": 85.8145 },
+      "summary": "Hosted a 'Coffee with a Cop' event at local cafe."
+    },
+    {
+      "id": 5,
+      "type": "citizen_commendation",
+      "officer": "A. Kaur (ID 301)",
+      "date": "2025-11-07",
+      "location": { "lat": 20.2861, "lng": 85.8345 },
+      "source": "Citizen Call",
+      "summary": "Citizen called to praise Officer Kaur's handling of a lost pet."
+    }
+  ]
+}

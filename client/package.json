@@ -22,11 +22,12 @@
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@reduxjs/toolkit": "^2.2.2",
     "aos": "^2.3.4",
-    "axios": "^1.6.8",
+    "axios": "^1.13.2",
     "chart.js": "^4.4.7",
     "country-state-city": "^3.2.1",
     "firebase": "^10.9.0",
     "flowbite-react": "^0.7.5",
+    "framer-motion": "^12.23.24",
     "jspdf": "^2.5.2",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.462.0",
@@ -43,10 +44,12 @@
     "react-select": "^5.8.3",
     "react-sweetalert2": "^0.6.0",
     "react-toastify": "^10.0.6",
+    "recharts": "^3.4.1",
     "redux-persist": "^6.0.0",
     "styled-components": "^6.1.8",
     "sweetalert2": "^11.10.7",
-    "sweetalert2-react-content": "^5.0.7"
+    "sweetalert2-react-content": "^5.0.7",
+    "topojson-client": "^3.1.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
