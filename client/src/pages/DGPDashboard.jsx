@@ -10,8 +10,8 @@ import {
   ScatterChart as ScatterIcon, Activity, Shield, Brain, Bell,
   BarChart3, RefreshCw, Download, Calendar, Filter, Eye,
   Zap, Target, Globe, Database, ChevronUp, ChevronDown, 
-  Map as MapIcon, Trophy, TrendingDown as TrendingDownIcon, UserCheck, Droplet, // Added Droplet for sand
-  Truck, Search, Waves // Added Truck and Waves
+  Map as MapIcon, Trophy, TrendingDown as TrendingDownIcon, UserCheck, Droplet,
+  Truck, Search, Waves
 } from 'lucide-react';
 
 // New imports for the map
@@ -22,7 +22,8 @@ import * as topojson from 'topojson-client';
 import axios from 'axios'; // For fetching GeoJSON
 
 // Import all our NEW API functions
-import * as api from '../services/api';
+// --- FIX 1: Make sure the path is correct (mine was lowercase) ---
+import * as api from '../services/API'; 
 import { useAuth } from '../context/AuthContext'; // To get user info
 
 // --- LEAFLET ICON FIX ---
@@ -33,8 +34,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// --- REUSABLE UI COMPONENTS (Your beautiful style) ---
-
+// --- REUSABLE UI COMPONENTS (Your beautiful style - UNCHANGED) ---
 const DashboardCard = ({ title, icon, children, gridSpan = "col-span-1", delay = 0, badge = null, height = "h-[400px]" }) => {
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
@@ -90,7 +90,7 @@ const StatsCard = ({ title, value, change, icon, color, subtitle, delay = 0 }) =
   const [displayValue, setDisplayValue] = useState(0);
   
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setIsVisible(true);
       const target = typeof value === 'string' ? parseFloat(value.replace(/[^0-9.]/g, '')) : value;
       if (isNaN(target)) {
@@ -109,11 +109,14 @@ const StatsCard = ({ title, value, change, icon, color, subtitle, delay = 0 }) =
         }
       }, duration / steps);
       return () => clearInterval(interval);
-    }, [value, delay]);
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [value, delay]);
 
   const formatDisplayValue = () => {
     if (typeof displayValue === 'number') {
-      if (value.toString().includes('%')) return `${displayValue.toFixed(1)}%`; // Show decimals for rates
+      if (value.toString().includes('%')) return `${displayValue.toFixed(1)}%`;
       if (value.toString().includes('k')) return `${(displayValue / 1000).toFixed(1)}k`;
       return displayValue.toLocaleString(undefined, { maximumFractionDigits: 0 });
     }
@@ -151,10 +154,8 @@ const StatsCard = ({ title, value, change, icon, color, subtitle, delay = 0 }) =
   );
 };
 
-
-// --- AI WIDGETS ---
-
 // --- WIDGET 1: AI Smart Alerts (Forecast) ---
+// ... (Your AiForecastWidget component code is perfect, no changes needed) ...
 const AiForecastWidget = ({ alerts }) => (
   <div className="glass-card rounded-2xl p-6 slide-up">
     <div className="flex items-center justify-between mb-6">
@@ -198,6 +199,7 @@ const AiForecastWidget = ({ alerts }) => (
 );
 
 // --- WIDGET 2: AI Monthly Summary (NLG) ---
+// ... (Your AiSummaryWidget component code is perfect, no changes needed) ...
 const AiSummaryWidget = ({ summary }) => (
   <DashboardCard title="AI Monthly Summary (NLG)" icon={<Brain />} delay={100} height="h-[300px]">
     <div className="h-full flex flex-col justify-center">
@@ -209,6 +211,7 @@ const AiSummaryWidget = ({ summary }) => (
 );
 
 // --- WIDGET 3: Special Drive Leaderboard (Gamification) ---
+// ... (Your DriveLeaderboardWidget component code is perfect, no changes needed) ...
 const DriveLeaderboardWidget = () => {
   const [metric, setMetric] = useState('narcotics_ganja_kg');
   const [data, setData] = useState([]);
@@ -281,6 +284,7 @@ const DriveLeaderboardWidget = () => {
 };
 
 // --- WIDGET 4: Geo-Analytics Map (GIS) ---
+// ... (Your GeoAnalyticsWidget component code is perfect, no changes needed) ...
 const GeoAnalyticsWidget = ({ mapData }) => {
   const [geoData, setGeoData] = useState(null);
   const [mapMetric, setMapMetric] = useState('conviction_rate');
@@ -310,23 +314,17 @@ const GeoAnalyticsWidget = ({ mapData }) => {
   };
 
   const getColor = (value, metric) => {
-    // Green = good
     if (metric === 'conviction_rate' || metric === 'nbw_executed') {
-      if (value > 75) return '#166534';
-      if (value > 60) return '#15803d';
-      if (value > 45) return '#22c55e';
-      if (value > 30) return '#86efac';
+      if (value > 75) return '#166534'; if (value > 60) return '#15803d';
+      if (value > 45) return '#22c55e'; if (value > 30) return '#86efac';
       return '#dcfce7';
     }
-    // Red = bad (high numbers are bad)
     if (metric === 'narcotics_ganja_kg' || metric === 'firearms_seized') {
-      if (value > 1000) return '#b91c1c';
-      if (value > 500) return '#dc2626';
-      if (value > 100) return '#f87171';
-      if (value > 10) return '#fecaca';
+      if (value > 1000) return '#b91c1c'; if (value > 500) return '#dc2626';
+      if (value > 100) return '#f87171'; if (value > 10) return '#fecaca';
       return '#fee2e2';
     }
-    return '#ccc'; // Default
+    return '#ccc';
   };
 
   const geoStyle = (feature) => {
@@ -410,6 +408,95 @@ const GeoAnalyticsWidget = ({ mapData }) => {
 };
 
 
+// --- [NEW] WIDGET 8: District Performance Spotlight (No change) ---
+const DistrictSpotlightWidget = ({ prideData, workloadData }) => {
+  // --- FIX: Add safety check for empty arrays ---
+  const topPride = [...(prideData || [])].sort((a, b) => b.score - a.score).slice(0, 3);
+  const bottomPride = [...(prideData || [])].sort((a, b) => a.score - b.score).slice(0, 3);
+  const topWorkload = [...(workloadData || [])].sort((a, b) => b.ratio - a.ratio).slice(0, 3);
+
+  const ListItem = ({ rank, text, value, color }) => (
+    <li className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
+      <div className="flex items-center gap-2">
+        <span className={`text-sm font-semibold ${color}`}>{rank}.</span>
+        <span className="text-sm font-medium text-gray-700">{text}</span>
+      </div>
+      <span className={`text-sm font-bold ${color}`}>{value}</span>
+    </li>
+  );
+
+  return (
+    <DashboardCard 
+      title="District Performance Spotlight" 
+      icon={<Trophy />} 
+      gridSpan="col-span-1"
+      delay={700}
+    >
+      <div className="h-full grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Left Column: Best */}
+        <div className="flex flex-col">
+          <h3 className="text-sm font-semibold text-green-600 mb-2">Top 3 (Conviction Rate)</h3>
+          <ul className="space-y-1">
+            {topPride.map((d, i) => (
+              <ListItem key={d.district} rank={i+1} text={d.district} value={d.score} color="text-green-600" />
+            ))}
+          </ul>
+          <h3 className="text-sm font-semibold text-red-600 mb-2 mt-4">Top 3 (Highest Workload)</h3>
+          <ul className="space-y-1">
+            {topWorkload.map((d, i) => (
+              <ListItem key={d.district} rank={i+1} text={d.district} value={d.ratio} color="text-red-600" />
+            ))}
+          </ul>
+        </div>
+        {/* Right Column: Focus */}
+        <div className="flex flex-col">
+          <h3 className="text-sm font-semibold text-yellow-600 mb-2">Areas for Focus (Bottom 3 Conviction)</h3>
+          <ul className="space-y-1">
+            {bottomPride.map((d, i) => (
+              <ListItem key={d.district} rank={i+1} text={d.district} value={d.score} color="text-yellow-600" />
+            ))}
+          </ul>
+        </div>
+      </div>
+    </DashboardCard>
+  );
+};
+
+// --- [NEW] WIDGET 9: Top Officers (No change) ---
+const TopOfficersWidget = ({ data }) => {
+  return (
+    <DashboardCard 
+      title="Top Performing Officers" 
+      icon={<UserCheck />} 
+      gridSpan="col-span-1"
+      delay={800}
+      badge={{ text: 'State-Wide', color: 'bg-blue-100 text-blue-800' }}
+    >
+      <div className="h-full overflow-y-auto pr-2 custom-scrollbar">
+        <ul className="space-y-2">
+          {data.map((officer, index) => (
+            <li 
+              key={officer.name} 
+              className="flex items-center p-3 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100"
+              style={{animationDelay: `${index * 50}ms`}}
+            >
+              <span className="text-lg font-bold text-blue-700 w-8">{index + 1}.</span>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-gray-800">{officer.name}</p>
+                <p className="text-xs text-gray-500">ID: {officer.name.split('(')[1].replace(')', '')}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-lg font-bold text-blue-600">{officer.recognitions}</p>
+                <p className="text-xs text-gray-500">Recognitions</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </DashboardCard>
+  );
+};
+
 // --- Main DGP Dashboard Component ---
 function DGPDashboard() {
   const { user } = useAuth();
@@ -419,27 +506,47 @@ function DGPDashboard() {
   const [alerts, setAlerts] = useState([]);
   const [convictionRates, setConvictionRates] = useState([]);
   const [mapData, setMapData] = useState({});
-  // ... (other states)
+  const [topOfficers, setTopOfficers] = useState([]);
+  const [workload, setWorkload] = useState([]);
   
+  // --- FIX 2: Add state for the new data ---
+  const [nbwTotal, setNbwTotal] = useState(0);
+  const [firearmsTotal, setFirearmsTotal] = useState(0);
+
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   
   // Fetch all data
   const fetchData = async () => {
     try {
-      // Use Promise.allSettled for robustness
+      // --- FIX 3: Add new API calls to the fetch ---
       const results = await Promise.allSettled([
-        api.getMonthlySummary(),
-        api.getPerformanceForecast(),
-        api.getConvictionRates(),
-        api.getMapData()
-        // We'll load leaderboards dynamically
+        api.getMonthlySummary(),        // 0
+        api.getPerformanceForecast(),   // 1
+        api.getConvictionRates(),     // 2
+        api.getMapData(),               // 3
+        api.getDriveLeaderboard('nbw_executed'),    // 4
+        api.getDriveLeaderboard('firearms_seized')  // 5
+        // Add more calls here as needed
       ]);
       
+      // --- FIX 4: Set the new state variables ---
       if (results[0].status === 'fulfilled') setSummary(results[0].value.summary);
       if (results[1].status === 'fulfilled') setAlerts(results[1].value);
       if (results[2].status === 'fulfilled') setConvictionRates(results[2].value);
       if (results[3].status === 'fulfilled') setMapData(results[3].value);
+      
+      // Calculate totals from the leaderboard data
+      if (results[4].status === 'fulfilled') {
+        const nbwData = results[4].value;
+        setNbwTotal(nbwData.reduce((acc, d) => acc + d.value, 0));
+      }
+      if (results[5].status === 'fulfilled') {
+        const firearmsData = results[5].value;
+        setFirearmsTotal(firearmsData.reduce((acc, d) => acc + d.value, 0));
+      }
+      
+      // (This is a simplified fetch, you can expand it)
       
     } catch (err) {
       console.error("Error fetching dashboard data:", err);
@@ -458,10 +565,12 @@ function DGPDashboard() {
     fetchData();
   };
   
-  // --- Calculate Live KPI Cards ---
+  // --- FIX 5: Update KPI card values ---
   const kpiConviction = convictionRates[0] ? convictionRates[0].rate.toFixed(1) + '%' : '0%';
   const kpiAlerts = alerts.length;
-  // (Other KPIs can be added as we build)
+  // Use the new state variables
+  const kpiNbwExecuted = nbwTotal;
+  const kpiFirearmsSeized = firearmsTotal;
 
   if (loading && !refreshing) {
     return <LoadingSpinner />;
@@ -520,7 +629,7 @@ function DGPDashboard() {
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
       `}</style>
       
-      {/* Header (Re-using your beautiful header) */}
+      {/* Header */}
       <header className="glass-card border-b border-white/20 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
@@ -557,7 +666,8 @@ function DGPDashboard() {
       </header>
       
       <div className="max-w-7xl mx-auto px-6 py-6">
-        {/* KPI Cards (NOW 100% DATA DRIVEN) */}
+        
+        {/* --- FIX 6: Connect the StatsCards to the new state variables --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <StatsCard 
             title="State Conviction Rate" 
@@ -579,7 +689,7 @@ function DGPDashboard() {
           />
            <StatsCard 
             title="NBWs Executed" 
-            value={nbwDb.filter(d => d.month === 9).reduce((acc, d) => acc + d.executed_total, 0)}
+            value={kpiNbwExecuted}
             change={15} // Mock change
             subtitle="This Month"
             icon={<UserCheck />}
@@ -588,7 +698,7 @@ function DGPDashboard() {
           />
           <StatsCard 
             title="Firearms Seized" 
-            value={firearmsDb.filter(d => d.month === 9).reduce((acc, d) => acc + d.seizure_gun_rifle + d.seizure_pistol + d.seizure_revolver + d.seizure_mouzer + d.seizure_ak_47 + d.seizure_slr + d.seizure_others, 0)}
+            value={kpiFirearmsSeized}
             change={8} // Mock change
             subtitle="This Month"
             icon={<Target />}
@@ -613,6 +723,15 @@ function DGPDashboard() {
           <DriveLeaderboardWidget />
         </div>
         
+        {/* --- [NEW] Row 4: District Performance & Top Officers --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+          <DistrictSpotlightWidget 
+            prideData={convictionRates.map(c => ({ district: c.district, score: c.rate }))} // Use conviction rates for pride
+            workloadData={[]} // You need to fetch and pass workloadData here
+          />
+          <TopOfficersWidget data={[]} /> {/* You need to fetch and pass topOfficers here */}
+        </div>
+
       </div>
     </div>
   );

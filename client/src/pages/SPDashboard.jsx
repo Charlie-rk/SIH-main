@@ -2,28 +2,24 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   BarChart, Bar, PieChart, Pie, Cell, LineChart, Line, AreaChart, Area,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  RadialBarChart, RadialBar, PolarGrid, PolarAngleAxis, PolarRadiusAxis
+  RadialBarChart, RadialBar, FunnelChart, Funnel, LabelList,
+  PolarGrid       // <-- ADD THIS
 } from 'recharts';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-import { 
-  Award, Brain, Target, Map, FileText, TrendingUp, TrendingDown, 
-  Users, Clock, BarChart3, MapPin, Download, RefreshCw, CheckCircle, 
-  Send, Inbox, Database
+
+import {
+  Shield, BarChart3, RefreshCw, Download, Calendar, Filter, Eye,
+  Database, MapPin, Edit, Send, CheckCircle, Clock, Users, Search,
+  FileText, Home, Truck, Waves, UserCheck // Added new icons
 } from 'lucide-react';
+
+// Import all our NEW CCTNS API functions
 import * as api from '../services/API';
-// Fix for Leaflet icons
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
-// Modern Card Component with animations
-const DashboardCard = ({ title, icon, children, gridSpan = "col-span-1", delay = 0 }) => {
+import { useAuth } from '../context/AuthContext'; // To get user info
+
+// --- REUSABLE UI COMPONENTS (Your beautiful style) ---
+
+const DashboardCard = ({ title, icon, children, gridSpan = "col-span-1", delay = 0, height = "h-[400px]" }) => {
   const [isVisible, setIsVisible] = useState(false);
-  
   useEffect(() => {
     setTimeout(() => setIsVisible(true), delay);
   }, [delay]);
@@ -32,587 +28,265 @@ const DashboardCard = ({ title, icon, children, gridSpan = "col-span-1", delay =
     <div className={`glass-card glass-card-hover rounded-2xl p-6 ${gridSpan} ${isVisible ? 'slide-up' : 'opacity-0'}`}>
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-3 gradient-blue rounded-xl shadow-lg">
+          <div className="p-3 gradient-primary rounded-xl shadow-lg transform hover:scale-110 transition-transform">
             {React.cloneElement(icon, { className: "w-5 h-5 text-white" })}
           </div>
           <div>
             <h2 className="text-xl font-bold text-gray-800">{title}</h2>
-            <p className="text-sm text-gray-500 mt-1">Real-time analytics</p>
+            <p className="text-sm text-gray-500 mt-1">District-level insights</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="inline-block w-2 h-2 bg-green-500 rounded-full pulse"></span>
-          <span className="text-xs text-gray-500">Live</span>
-        </div>
       </div>
-      <div className="h-[400px]">
+      <div className={height}>
         {children}
       </div>
     </div>
   );
 };
-// Enhanced Loading Component
+
 const LoadingSpinner = () => (
-  <div className="fixed inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm z-50">
+  <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 z-50">
     <div className="text-center">
       <div className="relative">
-        <div className="w-24 h-24 border-4 border-blue-200 rounded-full animate-spin border-t-blue-600"></div>
+        <div className="w-32 h-32 border-4 border-blue-200 rounded-full animate-spin border-t-transparent">
+          <div className="absolute inset-4 border-4 border-indigo-200 rounded-full animate-spin border-t-transparent animate-reverse"></div>
+        </div>
         <div className="absolute inset-0 flex items-center justify-center">
-          <Database className="w-10 h-10 text-blue-600 float-animation" />
+          <Shield className="w-12 h-12 text-blue-600 float-animation" />
         </div>
       </div>
-      <p className="mt-4 text-lg font-semibold text-gray-700">Loading Analytics...</p>
-      <p className="mt-2 text-sm text-gray-500">Preparing your dashboard</p>
+      <div className="mt-8 space-y-2">
+        <p className="text-2xl font-bold text-gray-800">District Command Center</p>
+        <p className="text-sm text-gray-600">Loading your district's CCTNS data...</p>
+      </div>
     </div>
   </div>
 );
-// Stats Card Component
-const StatsCard = ({ title, value, change, icon, color, delay = 0 }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [displayValue, setDisplayValue] = useState(0);
-  
-  useEffect(() => {
-    setTimeout(() => {
-      setIsVisible(true);
-      // Animate number
-      const target = typeof value === 'string' ? parseInt(value) : value;
-      const duration = 1000;
-      const steps = 30;
-      const stepValue = target / steps;
-      let current = 0;
-      
-      const interval = setInterval(() => {
-        current += stepValue;
-        if (current >= target) {
-          setDisplayValue(target);
-          clearInterval(interval);
-        } else {
-          setDisplayValue(Math.floor(current));
-        }
-      }, duration / steps);
-      
-      return () => clearInterval(interval);
-    }, delay);
-  }, [value, delay]);
-  
-  return (
-    <div className={`glass-card rounded-xl p-6 ${isVisible ? 'slide-up' : 'opacity-0'}`}>
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="text-3xl font-bold text-gray-900 mt-2 ticker">
-            {typeof value === 'string' && value.includes('%') 
-              ? `${displayValue}%` 
-              : typeof value === 'string' && value.includes('m')
-              ? `${displayValue}m`
-              : displayValue.toLocaleString()}
-          </p>
-          {change && (
-            <div className="flex items-center mt-2">
-              {change > 0 ? (
-                <>
-                  <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
-                  <span className="text-sm font-medium text-green-600">+{change}%</span>
-                </>
-              ) : (
-                <>
-                  <TrendingDown className="w-4 h-4 text-red-500 mr-1" />
-                  <span className="text-sm font-medium text-red-600">{change}%</span>
-                </>
-              )}
-              <span className="text-sm text-gray-500 ml-1">vs last month</span>
-            </div>
-          )}
-        </div>
-        <div className={`p-4 rounded-xl ${color}`}>
-          {React.cloneElement(icon, { className: "w-6 h-6 text-white" })}
-        </div>
-      </div>
+
+// --- FORM STYLING ---
+// Reusable components for the CCTNS data entry forms
+const FormSection = ({ title, children }) => (
+  <div className="mb-6">
+    <h3 className="text-lg font-semibold text-gray-700 border-b border-gray-300 pb-2 mb-4">{title}</h3>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {children}
     </div>
-  );
-};
-// Enhanced Recognition Portal Widget
-const RecognitionPortalWidget = ({ events }) => {
-  const [approved, setApproved] = useState(new Set());
-  const [selectedFilter, setSelectedFilter] = useState('all');
-  
-  const handleApprove = async (eventId) => {
-    try {
-      await api.approvePrideEvent(eventId);
-      setApproved(prev => new Set(prev).add(eventId));
-    } catch (err) {
-      console.error("Failed to approve event:", err);
-    }
-  };
-  
-  const getIcon = (type) => {
-    switch(type) {
-      case 'excellence': return '⭐';
-      case 'achievement': return '🏆';
-      case 'innovation': return '💡';
-      case 'community': return '🤝';
-      default: return '👍';
-    }
-  };
-  
-  const getEventType = (event) => {
-    if (event.source?.includes('AI')) return 'innovation';
-    if (event.source?.includes('Life')) return 'excellence';
-    if (event.source?.includes('Performance')) return 'achievement';
-    return 'community';
-  };
-  
-  const filteredEvents = selectedFilter === 'all' 
-    ? events 
-    : events.filter(e => getEventType(e) === selectedFilter);
+  </div>
+);
+
+const FormInput = ({ label, value, onChange, name, type = "number" }) => (
+  <div className="flex flex-col">
+    <label className="text-xs font-medium text-gray-500 mb-1">{label}</label>
+    <input
+      type={type}
+      name={name}
+      value={value || ''}
+      onChange={onChange}
+      className="px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+  </div>
+);
+
+
+// --- SP DASHBOARD WIDGETS ---
+
+// --- WIDGET 1: Pendency Gauge ---
+const PendencyGaugeWidget = ({ data }) => {
+  const percentage = data.pendency_percentage || 0;
+  const color = percentage > 40 ? '#ef4444' : percentage > 30 ? '#f59e0b' : '#10b981';
   
   return (
-    <DashboardCard 
-      title="Recognition Portal" 
-      icon={<Award />}
-      delay={100}
-    >
-      <div className="h-full flex flex-col">
-        <div className="flex gap-2 mb-4">
-          {['all', 'excellence', 'achievement', 'innovation', 'community'].map(filter => (
-            <button
-              key={filter}
-              onClick={() => setSelectedFilter(filter)}
-              className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
-                selectedFilter === filter 
-                  ? 'gradient-blue text-white shadow-lg' 
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              {filter.charAt(0).toUpperCase() + filter.slice(1)}
-            </button>
-          ))}
-        </div>
-        <div className="flex-1 overflow-y-auto pr-2 space-y-3">
-          {filteredEvents.length === 0 && (
-            <div className="text-center py-8">
-              <Inbox className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-400">No recognitions in this category</p>
-            </div>
-          )}
-          {filteredEvents.map((event, index) => {
-            const isApproved = approved.has(event.id);
-            const eventType = getEventType(event);
-            return (
-              <div 
-                key={event.id} 
-                className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 flex items-center hover:shadow-md transition-all"
-                style={{animationDelay: `${index * 100}ms`}}
-              >
-                <div className="mr-3">
-                  <span className="text-3xl" title={eventType}>
-                    {getIcon(eventType)}
-                  </span>
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-800">{event.summary}</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                      {event.source}
-                    </span>
-                    <span className="text-xs text-gray-500">{event.date}</span>
-                  </div>
-                </div>
-                <button
-                  onClick={() => handleApprove(event.id)}
-                  disabled={isApproved}
-                  className={`ml-4 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all transform hover:scale-105 flex items-center gap-2 ${
-                    isApproved 
-                      ? 'bg-gray-400 cursor-not-allowed' 
-                      : 'gradient-success hover:shadow-lg'
-                  }`}
-                >
-                  {isApproved ? (
-                    <CheckCircle className="w-4 h-4" />
-                  ) : (
-                    <Send className="w-4 h-4" />
-                  )}
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+    <DashboardCard title="Case Pendency (Cog. Cases > 30 Days)" icon={<Clock />} height="h-[300px]">
+      <ResponsiveContainer width="100%" height="100%">
+        <RadialBarChart
+          cx="50%"
+          cy="50%"
+          innerRadius="70%"
+          outerRadius="100%"
+          barSize={30}
+          data={[{ value: percentage }]}
+          startAngle={90}
+          endAngle={-270}
+        >
+          <PolarGrid gridType="polygon" />
+          <RadialBar
+            minAngle={15}
+            background
+            clockWise
+            dataKey="value"
+            fill={color}
+            cornerRadius={15}
+          />
+          <text
+            x="50%"
+            y="50%"
+            textAnchor="middle"
+            dominantBaseline="middle"
+            className="text-5xl font-bold fill-gray-800"
+          >
+            {`${percentage.toFixed(1)}%`}
+          </text>
+        </RadialBarChart>
+      </ResponsiveContainer>
     </DashboardCard>
   );
 };
-// Enhanced AI Case Blocker Widget with modern donut chart
-const AICaseBlockerWidget = ({ data }) => {
-  const COLORS = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#64748b'];
-  const validData = data.filter(d => d.value > 0);
-  const total = validData.reduce((sum, item) => sum + item.value, 0);
-  
-  return (
-    <DashboardCard 
-      title="AI Case Blocker Analysis" 
-      icon={<Brain />}
-      delay={200}
-    >
-      <div className="h-full flex">
-        <div className="w-2/3">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={validData}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                innerRadius={70}
-                outerRadius={120}
-                startAngle={90}
-                endAngle={-270}
-              >
-                {validData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                  border: 'none',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-                }} 
-              />
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="text-center -mt-48">
-            <p className="text-3xl font-bold text-gray-800">{total}</p>
-            <p className="text-sm text-gray-500">Total Blockers</p>
-          </div>
-        </div>
-        <div className="w-1/3 space-y-2 pl-4">
-          {validData.map((item, index) => (
-            <div key={item.name} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
-              <div className="flex items-center gap-2">
-                <div 
-                  className="w-3 h-3 rounded-full" 
-                  style={{backgroundColor: COLORS[index % COLORS.length]}}
-                ></div>
-                <span className="text-sm font-medium text-gray-700">{item.name}</span>
-              </div>
-              <span className="text-sm font-bold text-gray-900">{item.value}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </DashboardCard>
-  );
-};
-// Enhanced Tactical KPI Widget
-const TacticalKpiWidget = ({ kpis }) => {
-  if (!kpis) return null;
-  
-  // Generate trend data if not available
-  const trendData = kpis.trend || [
-    { month: "Jan", cases: 120, resolved: 105 },
-    { month: "Feb", cases: 135, resolved: 118 },
-    { month: "Mar", cases: 110, resolved: 98 },
-    { month: "Apr", cases: 125, resolved: 109 },
-    { month: "May", cases: 140, resolved: 122 },
-    { month: "Jun", cases: 115, resolved: 100 }
+
+// --- WIDGET 2: NBW Drive Funnel ---
+const NbwFunnelWidget = ({ data }) => {
+  const funnelData = [
+    { name: 'Total NBWs', value: data.total_nbw || 0, fill: '#3b82f6' },
+    { name: 'Total Disposed', value: data.total_disposed_off || 0, fill: '#10b981' },
+    { name: 'Executed', value: data.executed_total || 0, fill: '#8b5cf6' },
   ];
   
   return (
-    <DashboardCard 
-      title="District Performance Metrics" 
-      icon={<Target />}
-      delay={300}
-    >
-      <div className="h-full flex flex-col">
-        <div className="flex gap-4 mb-4">
-          <div className="flex-1 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-100">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 font-medium">Clearance Rate</p>
-                <p className="text-3xl font-bold text-green-600 mt-1">{kpis.clearanceRate}%</p>
-              </div>
-              <div className="relative w-16 h-16">
-                <svg className="transform -rotate-90 w-16 h-16">
-                  <circle
-                    cx="32"
-                    cy="32"
-                    r="28"
-                    stroke="#e5e7eb"
-                    strokeWidth="8"
-                    fill="none"
-                  />
-                  <circle
-                    cx="32"
-                    cy="32"
-                    r="28"
-                    stroke="#10b981"
-                    strokeWidth="8"
-                    fill="none"
-                    strokeDasharray={`${2 * Math.PI * 28 * kpis.clearanceRate / 100} ${2 * Math.PI * 28}`}
-                    className="transition-all duration-1000"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex-1">
-          <p className="text-sm font-medium text-gray-600 mb-2">Crime Trend Analysis</p>
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={trendData}>
-              <defs>
-                <linearGradient id="colorCases" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                </linearGradient>
-                <linearGradient id="colorResolved" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="month" stroke="#6b7280" />
-              <YAxis stroke="#6b7280" />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                  border: 'none',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-                }} 
-              />
-              <Area 
-                type="monotone" 
-                dataKey="cases" 
-                stroke="#3b82f6" 
-                fillOpacity={1} 
-                fill="url(#colorCases)" 
-                strokeWidth={2}
-              />
-              <Area 
-                type="monotone" 
-                dataKey="resolved" 
-                stroke="#10b981" 
-                fillOpacity={1} 
-                fill="url(#colorResolved)" 
-                strokeWidth={2}
-              />
-              <Legend />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+    <DashboardCard title="NBW Drive Funnel" icon={<UserCheck />} height="h-[300px]">
+      <ResponsiveContainer width="100%" height="100%">
+        <FunnelChart>
+          <Tooltip />
+          <Funnel dataKey="value" data={funnelData} isAnimationActive>
+            <LabelList position="right" fill="#000" stroke="none" dataKey="name" />
+          </Funnel>
+        </FunnelChart>
+      </ResponsiveContainer>
     </DashboardCard>
   );
 };
-// Enhanced Impact Map Widget
-const ImpactMapWidget = ({ events, district }) => {
-  const mapCenter = events.length > 0 
-    ? [events[0].location.lat, events[0].location.lng]
-    : [20.95, 84.5];
-  
-  const createCustomIcon = (event) => {
-    return L.divIcon({
-      html: `
-        <div class="relative">
-          <div class="absolute inset-0 bg-blue-500 rounded-full opacity-30 animate-ping"></div>
-          <div class="relative bg-white p-2 rounded-full shadow-lg border-2 border-blue-500">
-            ${event.type === 'btc_nomination' ? '⭐' : '📍'}
-          </div>
-        </div>
-      `,
-      className: 'custom-marker',
-      iconSize: [40, 40],
-      iconAnchor: [20, 40]
-    });
-  };
+
+// --- WIDGET 3: Missing Persons Tracker ---
+const MissingPersonsWidget = ({ data }) => {
+  const chartData = [
+    { name: 'Boys', Missing: data.boy_missing_start, Traced: data.boy_traced },
+    { name: 'Girls', Missing: data.girl_missing_start, Traced: data.girl_traced },
+    { name: 'Male', Missing: data.male_missing_start, Traced: data.male_traced },
+    { name: 'Female', Missing: data.female_missing_start, Traced: data.female_traced },
+  ];
   
   return (
-    <DashboardCard 
-      title="Positive Impact Heatmap" 
-      icon={<Map />}
-      delay={400}
-    >
-      <div className="h-full flex flex-col">
-        <div className="flex gap-2 mb-3">
-          <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full">
-            <span className="text-lg">⭐</span>
-            <span className="text-xs font-medium text-blue-800">Excellence</span>
-          </div>
-          <div className="flex items-center gap-2 px-3 py-1 bg-purple-50 rounded-full">
-            <span className="text-lg">📍</span>
-            <span className="text-xs font-medium text-purple-800">Achievement</span>
-          </div>
-        </div>
-        <div className="flex-1 rounded-xl overflow-hidden border border-gray-200">
-          <MapContainer
-            center={mapCenter}
-            zoom={10}
-            style={{ width: '100%', height: '100%' }}
-          >
-            <TileLayer
-              attribution='&copy; OpenStreetMap contributors'
-              url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-            />
-            {events.map(event => (
-              <Marker
-                key={event.id}
-                position={[event.location.lat, event.location.lng]}
-                icon={createCustomIcon(event)}
-              >
-                <Popup>
-                  <div className="p-2">
-                    <h4 className="font-bold text-sm">{event.type}</h4>
-                    <p className="text-xs mt-1">{event.summary}</p>
-                    <span className="text-xs text-gray-500">{event.date}</span>
-                  </div>
-                </Popup>
-              </Marker>
-            ))}
-          </MapContainer>
-        </div>
-      </div>
+    <DashboardCard title="Missing Persons Drive" icon={<Search />} height="h-[300px]">
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={chartData} layout="vertical" margin={{ left: 10 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+          <XAxis type="number" stroke="#6b7280" />
+          <YAxis dataKey="name" type="category" stroke="#6b7280" tick={{ fontSize: 12 }} />
+          <Tooltip 
+            contentStyle={{ 
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              border: 'none',
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+            }}
+          />
+          <Legend />
+          <Bar dataKey="Missing" fill="#ef4444" radius={[0, 8, 8, 0]} />
+          <Bar dataKey="Traced" fill="#10b981" radius={[0, 8, 8, 0]} />
+        </BarChart>
+      </ResponsiveContainer>
     </DashboardCard>
   );
 };
-// Main Dashboard Component
-function SPDashboard({ district = "Central District" }) {
-  const [prideEvents, setPrideEvents] = useState([]);
-  const [caseBlockers, setCaseBlockers] = useState([]);
-  const [mapEvents, setMapEvents] = useState([]);
-  const [kpis, setKpis] = useState(null);
-  const [hrData, setHrData] = useState(null);
+
+
+// --- Main SP Dashboard Component ---
+function SPDashboard() {
+  const { user } = useAuth(); // Get logged-in user (e.g., { role: 'SP', district: 'Khordha' })
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [month, setMonth] = useState(9); // Default to latest month (September)
   
+  // This one state will hold all 7 data objects
+  const [formData, setFormData] = useState({});
+  const [kpiData, setKpiData] = useState({}); // For the charts
+  
+  // --- Data Fetching ---
   const fetchData = async () => {
-    setLoading(true);
+    if (!user || !user.district) return;
+    
     try {
-      const results = await Promise.allSettled([
-        api.getPrideEvents(district),
-        api.getCaseBlockers(district),
-        api.getPrideMapEvents(district),
-        api.getCctnsKpis(district),
-        api.getHrData()
-      ]);
-      
-      if (results[0].status === 'fulfilled') setPrideEvents(results[0].value);
-      if (results[1].status === 'fulfilled') setCaseBlockers(results[1].value);
-      if (results[2].status === 'fulfilled') setMapEvents(results[2].value);
-      if (results[3].status === 'fulfilled') setKpis(results[3].value);
-      if (results[4].status === 'fulfilled') setHrData(results[4].value);
+      const data = await api.getDistrictData(user.district, month);
+      setFormData(data); // Set the data for the forms
+      setKpiData(data); // Set the data for the charts
     } catch (err) {
-      console.error("Error fetching data:", err);
+      console.error("Error fetching SP data:", err);
+      alert(`Failed to fetch data: ${err.response?.data?.error || err.message}`);
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
   };
-  
+
   useEffect(() => {
+    setLoading(true);
     fetchData();
-  }, [district]);
-  
+  }, [user, month]); // Refetch if user or month changes
+
   const handleRefresh = () => {
     setRefreshing(true);
     fetchData();
+  };
+
+  // --- Form Handling ---
+  const handleFormChange = (formName, e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [formName]: {
+        ...prev[formName],
+        [name]: type === 'number' ? parseInt(value) || 0 : value
+      }
+    }));
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      // Add user/month info to the report
+      const reportData = {
+        ...formData,
+        district: user.district,
+        month: month,
+        year: 2025
+      };
+      await api.postCctnsReport(reportData);
+      alert("Report submitted successfully!");
+    } catch (err) {
+      console.error("Error submitting report:", err);
+      alert(`Failed to submit: ${err.response?.data?.error || err.message}`);
+    }
+    setLoading(false);
   };
   
   if (loading && !refreshing) {
     return <LoadingSpinner />;
   }
   
+  // Destructure for easier access
+  const { convictions, nbw, firearms, sand_mining, missing_persons, pendency, preventive } = formData;
+
   return (
     <div className="min-h-screen gradient-mesh">
       <style jsx>{`
-        .gradient-mesh {
-          background-color: #f0f9ff;
-          background-image: 
-            radial-gradient(at 47% 33%, hsl(214.7, 100%, 97%) 0, transparent 59%), 
-            radial-gradient(at 82% 65%, hsl(217.2, 100%, 95%) 0, transparent 55%);
-        }
-        
-        .glass-card {
-          background: rgba(255, 255, 255, 0.95);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.3);
-          box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-        }
-        
-        .glass-card-hover {
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .glass-card-hover:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 20px 40px 0 rgba(31, 38, 135, 0.15);
-        }
-        
-        .gradient-blue {
-          background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-        }
-        
-        .gradient-success {
-          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        }
-        
-        .gradient-warning {
-          background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-        }
-        
-        .gradient-primary {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
-        }
-        
-        .pulse {
-          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        
-        @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        .slide-up {
-          animation: slideUp 0.5s ease-out forwards;
-        }
-        
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-        
-        .float-animation {
-          animation: float 3s ease-in-out infinite;
-        }
-        
-        .ticker {
-          animation: ticker 0.5s ease-out;
-        }
-        
-        @keyframes ticker {
-          from { transform: translateY(100%); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
-        }
-        
-        .custom-marker {
-          background: transparent !important;
-          border: none !important;
-        }
+        /* --- Your exact styling from DGP dashboard --- */
+        .gradient-mesh { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); background-size: cover; background-attachment: fixed; }
+        .gradient-mesh::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(240, 249, 255, 0.95) 0%, rgba(224, 242, 254, 0.95) 25%, rgba(224, 231, 255, 0.95) 50%, rgba(219, 234, 254, 0.95) 100%); z-index: -1; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15); }
+        .glass-card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .glass-card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px 0 rgba(31, 38, 135, 0.25); }
+        .gradient-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .gradient-blue { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); }
+        .gradient-success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .slide-up { animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+        .float-animation { animation: float 4s ease-in-out infinite; }
+        .animate-reverse { animation-direction: reverse; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
       `}</style>
       
       {/* Header */}
@@ -620,83 +294,125 @@ function SPDashboard({ district = "Central District" }) {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-2 gradient-blue rounded-xl shadow-lg">
-                <BarChart3 className="w-8 h-8 text-white" />
+              <div className="p-3 gradient-primary rounded-xl shadow-lg">
+                <Shield className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-800">
-                  District Intelligence Platform
+                <h1 className="text-3xl font-bold text-gray-800">
+                  District Command Center
                 </h1>
-                <p className="text-sm text-gray-600 flex items-center gap-2">
-                  <MapPin className="w-3 h-3" />
-                  {district}
+                <p className="text-sm text-gray-600 flex items-center gap-2 mt-1">
+                  <MapPin className="w-4 h-4" />
+                  SP Dashboard: <span className="font-semibold text-gray-700">{user.district}</span>
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <button className="px-4 py-2 bg-white rounded-xl shadow-sm border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all flex items-center gap-2">
-                <Download className="w-4 h-4" />
-                Export Report
-              </button>
+              <select 
+                value={month}
+                onChange={(e) => setMonth(parseInt(e.target.value, 10))}
+                className="px-4 py-2 bg-white rounded-xl shadow-sm border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all"
+              >
+                <option value={9}>September 2025</option>
+                <option value={8}>August 2025</option>
+              </select>
               <button 
                 onClick={handleRefresh}
-                className={`px-4 py-2 gradient-blue text-white rounded-xl shadow-lg text-sm font-medium hover:shadow-xl transition-all flex items-center gap-2 ${refreshing ? 'opacity-75' : ''}`}
+                className={`px-4 py-2 bg-white rounded-xl shadow-sm border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all flex items-center gap-2 ${refreshing ? 'opacity-75' : ''}`}
                 disabled={refreshing}
               >
                 <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
-                Refresh Data
+                Refresh
               </button>
             </div>
           </div>
         </div>
       </header>
       
-      {/* KPI Cards */}
       <div className="max-w-7xl mx-auto px-6 py-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <StatsCard 
-            title="Total Cases (District)" 
-            value={kpis?.totalCases || 0} 
-            change={12.5} // Note: 'change' is still mock, as we don't have historical data for it
-            icon={<FileText />}
-            color="gradient-blue"
-            delay={0}
-          />
-          <StatsCard 
-            title="Clearance Rate" 
-            value={`${kpis?.clearanceRate || 0}%`} 
-            change={5.2}
-            icon={<TrendingUp />}
-            color="gradient-success"
-            delay={100}
-          />
-          <StatsCard 
-            title="Active Officers (District)" 
-            value={(hrData && hrData[district]) ? hrData[district].total_strength : 0} 
-            change={-2.1}
-            icon={<Users />}
-            color="gradient-warning"
-            delay={200}
-          />
-          <StatsCard 
-            title="Avg. Response Time" 
-            value="4.2m" // This remains hardcoded, as we don't have this data
-            change={-8.3}
-            icon={<Clock />}
-            color="gradient-primary"
-            delay={300}
-          />
+        
+        {/* Row 1: Internal KPI Widgets */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <PendencyGaugeWidget data={kpiData.pendency || {}} />
+          <NbwFunnelWidget data={kpiData.nbw || {}} />
+          <MissingPersonsWidget data={kpiData.missing_persons || {}} />
+        </div>
+
+        {/* Row 2: CCTNS Data Entry & Report Generation */}
+        <div className="glass-card rounded-2xl p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="p-3 gradient-blue rounded-xl shadow-lg">
+                <FileText className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-gray-800">CCTNS "Good Work Done" Report</h2>
+                <p className="text-sm text-gray-500 mt-1">Submit your district's monthly data here.</p>
+              </div>
+            </div>
+            <button 
+              onClick={handleSubmit}
+              className="px-4 py-2 gradient-success text-white rounded-xl shadow-lg text-sm font-medium hover:shadow-xl transition-all flex items-center gap-2"
+            >
+              <Send className="w-4 h-4" />
+              Submit Report to DGP
+            </button>
+          </div>
+          
+          {/* This is a simple tab-like structure. We can add a real tab component later. */}
+          <div className="h-[600px] overflow-y-auto custom-scrollbar pr-2">
+            
+            {/* --- PART 1a: NBW --- */}
+            <FormSection title="Part 1a: NBW Drive">
+              <FormInput label="Pending (Start)" name="pending_start_of_month" value={nbw?.pending_start_of_month} onChange={e => handleFormChange('nbw', e)} />
+              <FormInput label="Received This Month" name="received_this_month" value={nbw?.received_this_month} onChange={e => handleFormChange('nbw', e)} />
+              <FormInput label="Executed (Total)" name="executed_total" value={nbw?.executed_total} onChange={e => handleFormChange('nbw', e)} />
+              <FormInput label="Disposed (Total)" name="disposed_total" value={nbw?.disposed_total} onChange={e => handleFormChange('nbw', e)} />
+              <FormInput label="Pending (End)" name="pending_end_of_month" value={nbw?.pending_end_of_month} onChange={e => handleFormChange('nbw', e)} />
+              <FormInput label="Executed (Old Cases)" name="executed_old_cases" value={nbw?.executed_old_cases} onChange={e => handleFormChange('nbw', e)} />
+            </FormSection>
+
+            {/* --- PART 1b: Firearms --- */}
+            <FormSection title="Part 1b: Firearms Drive">
+              <FormInput label="Cases Registered" name="cases_registered" value={firearms?.cases_registered} onChange={e => handleFormChange('firearms', e)} />
+              <FormInput label="Persons Arrested" name="persons_arrested" value={firearms?.persons_arrested} onChange={e => handleFormChange('firearms', e)} />
+              <FormInput label="Pistols Seized" name="seizure_pistol" value={firearms?.seizure_pistol} onChange={e => handleFormChange('firearms', e)} />
+              <FormInput label="Ammunition Seized" name="seizure_ammunition" value={firearms?.seizure_ammunition} onChange={e => handleFormChange('firearms', e)} />
+              <FormInput label="AK-47 Seized" name="seizure_ak_47" value={firearms?.seizure_ak_47} onChange={e => handleFormChange('firearms', e)} />
+            </FormSection>
+
+            {/* --- PART 1c: Sand Mining --- */}
+            <FormSection title="Part 1c: Sand Mining Drive">
+              <FormInput label="Cases Registered" name="cases_registered" value={sand_mining?.cases_registered} onChange={e => handleFormChange('sand_mining', e)} />
+              <FormInput label="Vehicles Seized" name="vehicle_seized" value={sand_mining?.vehicle_seized} onChange={e => handleFormChange('sand_mining', e)} />
+              <FormInput label="Persons Arrested" name="persons_arrested" value={sand_mining?.persons_arrested} onChange={e => handleFormChange('sand_mining', e)} />
+            </FormSection>
+            
+            {/* --- PART 1g: Narcotics --- */}
+            <FormSection title="Part 1g: Narcotics Drive">
+              <FormInput label="Cases Registered" name="narcotics_cases_registered" value={preventive?.narcotics_cases_registered} onChange={e => handleFormChange('preventive', e)} />
+              <FormInput label="Persons Arrested" name="narcotics_persons_arrested" value={preventive?.narcotics_persons_arrested} onChange={e => handleFormChange('preventive', e)} />
+              <FormInput label="Ganja Seized (Kg)" name="narcotics_seizure_ganja_kg" value={preventive?.narcotics_seizure_ganja_kg} onChange={e => handleFormChange('preventive', e)} />
+              <FormInput label="Brownsugar (gm)" name="narcotics_seizure_brownsugar_gm" value={preventive?.narcotics_seizure_brownsugar_gm} onChange={e => handleFormChange('preventive', e)} />
+              <FormInput label="Vehicles Seized" name="narcotics_seizure_vehicles" value={preventive?.narcotics_seizure_vehicles} onChange={e => handleFormChange('preventive', e)} />
+            </FormSection>
+
+            {/* --- PART 2: Convictions --- */}
+            <FormSection title="Part 2: Convictions">
+              <FormInput label="IPC Trial Completed" name="ipc_bns_trial_completed" value={convictions?.ipc_bns_trial_completed} onChange={e => handleFormChange('convictions', e)} />
+              <FormInput label="IPC Conviction" name="ipc_bns_conviction" value={convictions?.ipc_bns_conviction} onChange={e => handleFormChange('convictions', e)} />
+              <FormInput label="IPC Acquitted" name="ipc_bns_acquitted" value={convictions?.ipc_bns_acquitted} onChange={e => handleFormChange('convictions', e)} />
+              <FormInput label="SLL Trial Completed" name="sll_trial_completed" value={convictions?.sll_trial_completed} onChange={e => handleFormChange('convictions', e)} />
+              <FormInput label="SLL Conviction" name="sll_conviction" value={convictions?.sll_conviction} onChange={e => handleFormChange('convictions', e)} />
+              <FormInput label="Speedy Trial Convictions" name="speedy_trial_convictions" value={convictions?.speedy_trial_convictions} onChange={e => handleFormChange('convictions', e)} />
+            </FormSection>
+            
+          </div>
         </div>
         
-        {/* Main Dashboard Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <RecognitionPortalWidget events={prideEvents} />
-          <AICaseBlockerWidget data={caseBlockers} />
-          <TacticalKpiWidget kpis={kpis} />
-          <ImpactMapWidget events={mapEvents} district={district} />
-        </div>
       </div>
     </div>
   );
 }
+
 export default SPDashboard;

@@ -7,17 +7,9 @@ const api = axios.create({
   baseURL: API_URL
 });
 
-
-
 /**
- * NEW: Axios Interceptor
- *
- * This is the magic. It "intercepts" every request going out.
- * It checks if we have a token in localStorage, and if so,
- * it automatically adds the "Authorization: Bearer TOKEN" header.
- *
- * This means we *never* have to manually add the token to any
- * of our other API calls (getPrideScore, getWorkloadData, etc.)
+ * Axios Interceptor
+ * This automatically attaches the auth token to every request.
  */
 api.interceptors.request.use(
   (config) => {
@@ -32,9 +24,7 @@ api.interceptors.request.use(
   }
 );
 
-
-
-// === NEW AUTH ENDPOINT ===
+// === AUTHENTICATION ===
 
 /**
  * Logs the user in by sending username/password to the backend.
@@ -44,13 +34,11 @@ api.interceptors.request.use(
  */
 export const login = async (username, password) => {
   const { data } = await api.post('/api/auth/login', { username, password });
-  // If login is successful, store the token
   if (data.token) {
     localStorage.setItem('authToken', data.token);
   }
   return data;
 };
-
 
 /**
  * Logs the user out by simply removing the token.
@@ -64,98 +52,63 @@ export const logout = () => {
 // === DGP (STATE-LEVEL) ENDPOINTS ===
 
 /**
- * (DGP) AI: P.R.I.D.E. Score Leaderboard
+ * Feature: AI-Generated "Monthly Performance Summary" (NLP/NLG)
  */
-export const getPrideScore = async () => {
-  const { data } = await api.get('/api/ai/pride_score');
+export const getMonthlySummary = async () => {
+  const { data } = await api.get('/api/ai/monthly_summary');
   return data;
 };
 
 /**
- * (DGP) AI: Correlation (P.R.I.D.E. vs. Crime)
+ * Feature: Performance Forecasting (ML "Districts to Watch")
  */
-export const getCorrelationData = async () => {
-  const { data } = await api.get('/api/ai/correlation');
+export const getPerformanceForecast = async () => {
+  const { data } = await api.get('/api/ai/performance_forecast');
   return data;
 };
 
 /**
- * (DGP) AI: Live Public Sentiment Trend
+ * Feature: "Special Drive" Leaderboards
+ * @param {string} metric - 'firearms_seized', 'sand_mining_cases', 'narcotics_ganja_kg', 'nbw_executed'
  */
-export const getSentimentTrends = async () => {
-  const { data } = await api.get('/api/ai/sentiment_trends');
+export const getDriveLeaderboard = async (metric) => {
+  const { data } = await api.get(`/api/drives/leaderboard/${metric}`);
   return data;
 };
 
 /**
- * (DGP) AI: "Smart Alerts" (Crime Anomalies)
+ * Feature: Conviction Rate Leaderboard
  */
-export const getSmartAlerts = async () => {
-  const { data } = await api.get('/api/ai/smart_alerts');
+export const getConvictionRates = async () => {
+  const { data } = await api.get('/api/analytics/conviction_rates');
   return data;
 };
 
 /**
- * (DGP) Analytics: Workload & Resource
+ * Feature: GIS / Geo-Analytics Map Data
  */
-export const getWorkloadData = async () => {
-  const { data } = await api.get('/api/analytics/workload');
-  return data;
-};
-
-/**
- * (DGP) Analytics: Granular HR
- */
-export const getHrData = async () => {
-  const { data } = await api.get('/api/analytics/hr');
-  return data;
-};
-
-export const getTopOfficers = async () => {
-  const { data } = await api.get(`/api/ai/top_officers`);
+export const getMapData = async () => {
+  const { data } = await api.get('/api/analytics/map_data');
   return data;
 };
 
 // === SP (DISTRICT-LEVEL) ENDPOINTS ===
 
 /**
- * (SP) AI: "Case Blocker" Analysis
+ * Feature: Get all data for a single district (for SP form pre-fill)
+ * @param {string} district - The name of the district
+ * @param {number} month - The month (e.g., 8 or 9)
  */
-export const getCaseBlockers = async (district) => {
-  const { data } = await api.get(`/api/ai/case_blockers/${district}`);
+export const getDistrictData = async (district, month) => {
+  const { data } = await api.get(`/api/district_data/${district}/${month}`);
   return data;
 };
 
 /**
- * (SP) CCTNS: Case Management KPIs
+ * Feature: Submit "Good Work Done" Report
+ * @param {object} reportData - The complete form data from the SP
  */
-export const getCctnsKpis = async (district) => {
-  const { data } = await api.get(`/api/cctns/kpis/${district}`);
-  return data;
-};
-
-/**
- * (SP) P.R.I.D.E.: Positive Impact Map
- */
-export const getPrideMapEvents = async (district) => {
-  const { data } = await api.get(`/api/pride/map/${district}`);
-  return data;
-};
-
-/**
- * (SP) P.R.I.D.E.: Recognition Portal (Feed)
- */
-export const getPrideEvents = async (district) => {
-  const { data } = await api.get(`/api/pride/events/${district}`);
-  return data;
-};
-
-
-
-/**
- * (SP) P.R.I.D.E.: Recognition Portal (Action)
- */
-export const approvePrideEvent = async (eventId) => {
-  const { data } = await api.post(`/api/pride/approve/${eventId}`);
+export const postCctnsReport = async (reportData) => {
+  const { data } = await api.post('/api/cctns/report', reportData);
   return data;
 };
