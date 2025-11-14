@@ -18,6 +18,9 @@
 # 🔗 Live Dashboard Access  
 **URL:** https://district-intelligence-2.onrender.com/
 
+# 🔗 Github Opensource Link  
+**URL:** https://github.com/Charlie-rk/SIH-main.git
+
 ---
 
 ## 🔐 Login Credentials
@@ -94,6 +97,23 @@ Based on the official CCTNS Problem Statement (PS-3), police districts manually 
 *Providing unique dashboards for each level of the police hierarchy*
 
 </div>
+
+---
+
+## 📁 CCTNS Data Files & Their Role (Human-Generated Content)
+
+| **Data File (Backend Variable)** | **CCTNS Part & Data Focus** | **Metric Importance** |
+|----------------------------------|------------------------------|------------------------|
+| **convictionsDb** | **Part 2: Convictions** (IPC, SLL, Speedy Trial) | **Core Ranking Metric:** Powers the Conviction Rate Leaderboard and the AI Monthly Summary’s top conviction metric. |
+| **nbwDb** | **Part 1a: NBW Drive** (Non-Bailable Warrants) | **Operational KPI:** Feeds the NBW Funnel (SP Dashboard) and the AI Monthly Summary for proactive policing insights. |
+| **pendencyDb** | **Part 1f: Case Pendency** (Cognizable Cases > 30 days) | **AI Forecasting:** Primary input for the ML Performance Forecast (“Districts to Watch”). Measures judicial & investigative efficiency. |
+| **preventiveDb** | **Part 1g: Narcotics, Excise, OPG** (Enforcement Seizures) | **Enforcement Leaderboards:** Drives rankings for Ganja, Brownsugar, and Excise seizures—key high-value performance metrics. |
+| **firearmsDb** | **Part 1b: Illegal Firearms Drive** (Cases & Seizures) | **Gamification & GIS:** Powers the Firearms Leaderboard and contributes to the Geo-Analytics map’s enforcement intensity layers. |
+| **sandMiningDb** | **Part 1c: Sand Mining Cases** (Cases, Vehicles Seized) | **Compliance Metric:** Tracks performance in economic & environmental crime enforcement; forms a critical part of SP submissions. |
+| **missingPersonsDb** | **Part 1d: Missing Persons Drive** (Missing vs Traced) | **Tactical KPI:** Feeds the Missing Persons Tracker (SP Dashboard), showing district effectiveness in tracing vulnerable individuals. |
+
+---
+
 
 ### 🌟 I. The "State View" (DGP Dashboard)
 
