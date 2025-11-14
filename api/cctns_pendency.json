@@ -1,0 +1,602 @@
+[
+  {
+    "district": "Angul",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 1800,
+    "pendency_over_30_days": 630,
+    "pendency_percentage": 35.0,
+    "target_cases_to_close": 200,
+    "cases_closed_during_drive": 210
+  },
+  {
+    "district": "Balangir",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 2100,
+    "pendency_over_30_days": 840,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 250,
+    "cases_closed_during_drive": 240
+  },
+  {
+    "district": "Balasore",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 3500,
+    "pendency_over_30_days": 1050,
+    "pendency_percentage": 30.0,
+    "target_cases_to_close": 350,
+    "cases_closed_during_drive": 360
+  },
+  {
+    "district": "Bargarh",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 2200,
+    "pendency_over_30_days": 770,
+    "pendency_percentage": 35.0,
+    "target_cases_to_close": 220,
+    "cases_closed_during_drive": 230
+  },
+  {
+    "district": "Bhadrak",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 2500,
+    "pendency_over_30_days": 900,
+    "pendency_percentage": 36.0,
+    "target_cases_to_close": 280,
+    "cases_closed_during_drive": 280
+  },
+  {
+    "district": "Boudh",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 900,
+    "pendency_over_30_days": 315,
+    "pendency_percentage": 35.0,
+    "target_cases_to_close": 100,
+    "cases_closed_during_drive": 110
+  },
+  {
+    "district": "Cuttack",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 4500,
+    "pendency_over_30_days": 1260,
+    "pendency_percentage": 28.0,
+    "target_cases_to_close": 450,
+    "cases_closed_during_drive": 470
+  },
+  {
+    "district": "Deogarh",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 700,
+    "pendency_over_30_days": 280,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 80,
+    "cases_closed_during_drive": 75
+  },
+  {
+    "district": "Dhenkanal",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 1900,
+    "pendency_over_30_days": 760,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 200,
+    "cases_closed_during_drive": 190
+  },
+  {
+    "district": "Gajapati",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 1000,
+    "pendency_over_30_days": 380,
+    "pendency_percentage": 38.0,
+    "target_cases_to_close": 110,
+    "cases_closed_during_drive": 110
+  },
+  {
+    "district": "Ganjam",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 5500,
+    "pendency_over_30_days": 1925,
+    "pendency_percentage": 35.0,
+    "target_cases_to_close": 550,
+    "cases_closed_during_drive": 580
+  },
+  {
+    "district": "Jagatsinghpur",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 2300,
+    "pendency_over_30_days": 805,
+    "pendency_percentage": 35.0,
+    "target_cases_to_close": 240,
+    "cases_closed_during_drive": 250
+  },
+  {
+    "district": "Jajpur",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 2800,
+    "pendency_over_30_days": 1008,
+    "pendency_percentage": 36.0,
+    "target_cases_to_close": 300,
+    "cases_closed_during_drive": 300
+  },
+  {
+    "district": "Jharsuguda",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 1700,
+    "pendency_over_30_days": 510,
+    "pendency_percentage": 30.0,
+    "target_cases_to_close": 180,
+    "cases_closed_during_drive": 190
+  },
+  {
+    "district": "Kalahandi",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 2000,
+    "pendency_over_30_days": 800,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 210,
+    "cases_closed_during_drive": 200
+  },
+  {
+    "district": "Kandhamal",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 1100,
+    "pendency_over_30_days": 440,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 120,
+    "cases_closed_during_drive": 125
+  },
+  {
+    "district": "Kendrapara",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 2400,
+    "pendency_over_30_days": 840,
+    "pendency_percentage": 35.0,
+    "target_cases_to_close": 250,
+    "cases_closed_during_drive": 260
+  },
+  {
+    "district": "Keonjhar",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 3000,
+    "pendency_over_30_days": 1050,
+    "pendency_percentage": 35.0,
+    "target_cases_to_close": 320,
+    "cases_closed_during_drive": 310
+  },
+  {
+    "district": "Khordha",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 5000,
+    "pendency_over_30_days": 1500,
+    "pendency_percentage": 30.0,
+    "target_cases_to_close": 500,
+    "cases_closed_during_drive": 550
+  },
+  {
+    "district": "Koraput",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 2600,
+    "pendency_over_30_days": 1040,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 280,
+    "cases_closed_during_drive": 270
+  },
+  {
+    "district": "Malkangiri",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 1200,
+    "pendency_over_30_days": 480,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 130,
+    "cases_closed_during_drive": 140
+  },
+  {
+    "district": "Mayurbhanj",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 3200,
+    "pendency_over_30_days": 1280,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 340,
+    "cases_closed_during_drive": 330
+  },
+  {
+    "district": "Nabarangpur",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 1300,
+    "pendency_over_30_days": 520,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 140,
+    "cases_closed_during_drive": 135
+  },
+  {
+    "district": "Nayagarh",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 1600,
+    "pendency_over_30_days": 640,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 170,
+    "cases_closed_during_drive": 170
+  },
+  {
+    "district": "Nuapada",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 1000,
+    "pendency_over_30_days": 400,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 110,
+    "cases_closed_during_drive": 100
+  },
+  {
+    "district": "Puri",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 2700,
+    "pendency_over_30_days": 810,
+    "pendency_percentage": 30.0,
+    "target_cases_to_close": 280,
+    "cases_closed_during_drive": 300
+  },
+  {
+    "district": "Rayagada",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 1800,
+    "pendency_over_30_days": 720,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 190,
+    "cases_closed_during_drive": 200
+  },
+  {
+    "district": "Sambalpur",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 2600,
+    "pendency_over_30_days": 910,
+    "pendency_percentage": 35.0,
+    "target_cases_to_close": 270,
+    "cases_closed_during_drive": 280
+  },
+  {
+    "district": "Subarnapur",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 950,
+    "pendency_over_30_days": 380,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 100,
+    "cases_closed_during_drive": 100
+  },
+  {
+    "district": "Sundargarh",
+    "year": 2025,
+    "month": 8,
+    "cases_reported_during_year": 4000,
+    "pendency_over_30_days": 1200,
+    "pendency_percentage": 30.0,
+    "target_cases_to_close": 420,
+    "cases_closed_during_drive": 430
+  },
+  {
+    "district": "Angul",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 1950,
+    "pendency_over_30_days": 650,
+    "pendency_percentage": 33.3,
+    "target_cases_to_close": 200,
+    "cases_closed_during_drive": 220
+  },
+  {
+    "district": "Balangir",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 2280,
+    "pendency_over_30_days": 912,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 250,
+    "cases_closed_during_drive": 260
+  },
+  {
+    "district": "Balasore",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 3750,
+    "pendency_over_30_days": 1087,
+    "pendency_percentage": 29.0,
+    "target_cases_to_close": 350,
+    "cases_closed_during_drive": 380
+  },
+  {
+    "district": "Bargarh",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 2380,
+    "pendency_over_30_days": 833,
+    "pendency_percentage": 35.0,
+    "target_cases_to_close": 220,
+    "cases_closed_during_drive": 240
+  },
+  {
+    "district": "Bhadrak",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 2700,
+    "pendency_over_30_days": 945,
+    "pendency_percentage": 35.0,
+    "target_cases_to_close": 280,
+    "cases_closed_during_drive": 290
+  },
+  {
+    "district": "Boudh",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 980,
+    "pendency_over_30_days": 343,
+    "pendency_percentage": 35.0,
+    "target_cases_to_close": 100,
+    "cases_closed_during_drive": 115
+  },
+  {
+    "district": "Cuttack",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 4800,
+    "pendency_over_30_days": 1344,
+    "pendency_percentage": 28.0,
+    "target_cases_to_close": 450,
+    "cases_closed_during_drive": 500
+  },
+  {
+    "district": "Deogarh",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 760,
+    "pendency_over_30_days": 304,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 80,
+    "cases_closed_during_drive": 80
+  },
+  {
+    "district": "Dhenkanal",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 2050,
+    "pendency_over_30_days": 820,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 200,
+    "cases_closed_during_drive": 210
+  },
+  {
+    "district": "Gajapati",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 1090,
+    "pendency_over_30_days": 414,
+    "pendency_percentage": 38.0,
+    "target_cases_to_close": 110,
+    "cases_closed_during_drive": 115
+  },
+  {
+    "district": "Ganjam",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 5900,
+    "pendency_over_30_days": 2006,
+    "pendency_percentage": 34.0,
+    "target_cases_to_close": 550,
+    "cases_closed_during_drive": 600
+  },
+  {
+    "district": "Jagatsinghpur",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 2500,
+    "pendency_over_30_days": 850,
+    "pendency_percentage": 34.0,
+    "target_cases_to_close": 240,
+    "cases_closed_during_drive": 260
+  },
+  {
+    "district": "Jajpur",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 3050,
+    "pendency_over_30_days": 1098,
+    "pendency_percentage": 36.0,
+    "target_cases_to_close": 300,
+    "cases_closed_during_drive": 310
+  },
+  {
+    "district": "Jharsuguda",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 1850,
+    "pendency_over_30_days": 555,
+    "pendency_percentage": 30.0,
+    "target_cases_to_close": 180,
+    "cases_closed_during_drive": 200
+  },
+  {
+    "district": "Kalahandi",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 2180,
+    "pendency_over_30_days": 872,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 210,
+    "cases_closed_during_drive": 210
+  },
+  {
+    "district": "Kandhamal",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 1200,
+    "pendency_over_30_days": 492,
+    "pendency_percentage": 41.0,
+    "target_cases_to_close": 120,
+    "cases_closed_during_drive": 130
+  },
+  {
+    "district": "Kendrapara",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 2600,
+    "pendency_over_30_days": 910,
+    "pendency_percentage": 35.0,
+    "target_cases_to_close": 250,
+    "cases_closed_during_drive": 270
+  },
+  {
+    "district": "Keonjhar",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 3250,
+    "pendency_over_30_days": 1137,
+    "pendency_percentage": 35.0,
+    "target_cases_to_close": 320,
+    "cases_closed_during_drive": 330
+  },
+  {
+    "district": "Khordha",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 5400,
+    "pendency_over_30_days": 1566,
+    "pendency_percentage": 29.0,
+    "target_cases_to_close": 500,
+    "cases_closed_during_drive": 580
+  },
+  {
+    "district": "Koraput",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 2800,
+    "pendency_over_30_days": 1148,
+    "pendency_percentage": 41.0,
+    "target_cases_to_close": 280,
+    "cases_closed_during_drive": 280
+  },
+  {
+    "district": "Malkangiri",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 1300,
+    "pendency_over_30_days": 533,
+    "pendency_percentage": 41.0,
+    "target_cases_to_close": 130,
+    "cases_closed_during_drive": 145
+  },
+  {
+    "district": "Mayurbhanj",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 3450,
+    "pendency_over_30_days": 1380,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 340,
+    "cases_closed_during_drive": 350
+  },
+  {
+    "district": "Nabarangpur",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 1420,
+    "pendency_over_30_days": 568,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 140,
+    "cases_closed_during_drive": 140
+  },
+  {
+    "district": "Nayagarh",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 1750,
+    "pendency_over_30_days": 700,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 170,
+    "cases_closed_during_drive": 180
+  },
+  {
+    "district": "Nuapada",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 1090,
+    "pendency_over_30_days": 436,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 110,
+    "cases_closed_during_drive": 105
+  },
+  {
+    "district": "Puri",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 2900,
+    "pendency_over_30_days": 841,
+    "pendency_percentage": 29.0,
+    "target_cases_to_close": 280,
+    "cases_closed_during_drive": 310
+  },
+  {
+    "district": "Rayagada",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 1950,
+    "pendency_over_30_days": 799,
+    "pendency_percentage": 41.0,
+    "target_cases_to_close": 190,
+    "cases_closed_during_drive": 200
+  },
+  {
+    "district": "Sambalpur",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 2800,
+    "pendency_over_30_days": 952,
+    "pendency_percentage": 34.0,
+    "target_cases_to_close": 270,
+    "cases_closed_during_drive": 290
+  },
+  {
+    "district": "Subarnapur",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 1050,
+    "pendency_over_30_days": 420,
+    "pendency_percentage": 40.0,
+    "target_cases_to_close": 100,
+    "cases_closed_during_drive": 105
+  },
+  {
+    "district": "Sundargarh",
+    "year": 2025,
+    "month": 9,
+    "cases_reported_during_year": 4300,
+    "pendency_over_30_days": 1247,
+    "pendency_percentage": 29.0,
+    "target_cases_to_close": 420,
+    "cases_closed_during_drive": 450
+  }
+]

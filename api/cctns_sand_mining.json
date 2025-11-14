@@ -1,0 +1,542 @@
+[
+  {
+    "district": "Angul",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 15,
+    "vehicle_seized": 22,
+    "persons_arrested": 18,
+    "notice_served": 30
+  },
+  {
+    "district": "Balangir",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 12,
+    "vehicle_seized": 18,
+    "persons_arrested": 15,
+    "notice_served": 25
+  },
+  {
+    "district": "Balasore",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 25,
+    "vehicle_seized": 35,
+    "persons_arrested": 30,
+    "notice_served": 40
+  },
+  {
+    "district": "Bargarh",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 14,
+    "vehicle_seized": 20,
+    "persons_arrested": 16,
+    "notice_served": 28
+  },
+  {
+    "district": "Bhadrak",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 18,
+    "vehicle_seized": 25,
+    "persons_arrested": 20,
+    "notice_served": 35
+  },
+  {
+    "district": "Boudh",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 8,
+    "vehicle_seized": 10,
+    "persons_arrested": 9,
+    "notice_served": 15
+  },
+  {
+    "district": "Cuttack",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 30,
+    "vehicle_seized": 45,
+    "persons_arrested": 38,
+    "notice_served": 50
+  },
+  {
+    "district": "Deogarh",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 6,
+    "vehicle_seized": 8,
+    "persons_arrested": 7,
+    "notice_served": 10
+  },
+  {
+    "district": "Dhenkanal",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 13,
+    "vehicle_seized": 19,
+    "persons_arrested": 15,
+    "notice_served": 25
+  },
+  {
+    "district": "Gajapati",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 9,
+    "vehicle_seized": 12,
+    "persons_arrested": 10,
+    "notice_served": 18
+  },
+  {
+    "district": "Ganjam",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 40,
+    "vehicle_seized": 60,
+    "persons_arrested": 50,
+    "notice_served": 70
+  },
+  {
+    "district": "Jagatsinghpur",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 16,
+    "vehicle_seized": 24,
+    "persons_arrested": 19,
+    "notice_served": 32
+  },
+  {
+    "district": "Jajpur",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 28,
+    "vehicle_seized": 40,
+    "persons_arrested": 35,
+    "notice_served": 45
+  },
+  {
+    "district": "Jharsuguda",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 14,
+    "vehicle_seized": 20,
+    "persons_arrested": 17,
+    "notice_served": 25
+  },
+  {
+    "district": "Kalahandi",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 11,
+    "vehicle_seized": 15,
+    "persons_arrested": 12,
+    "notice_served": 20
+  },
+  {
+    "district": "Kandhamal",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 7,
+    "vehicle_seized": 10,
+    "persons_arrested": 8,
+    "notice_served": 12
+  },
+  {
+    "district": "Kendrapara",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 20,
+    "vehicle_seized": 30,
+    "persons_arrested": 25,
+    "notice_served": 38
+  },
+  {
+    "district": "Keonjhar",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 22,
+    "vehicle_seized": 32,
+    "persons_arrested": 28,
+    "notice_served": 40
+  },
+  {
+    "district": "Khordha",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 35,
+    "vehicle_seized": 55,
+    "persons_arrested": 45,
+    "notice_served": 60
+  },
+  {
+    "district": "Koraput",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 10,
+    "vehicle_seized": 14,
+    "persons_arrested": 11,
+    "notice_served": 18
+  },
+  {
+    "district": "Malkangiri",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 5,
+    "vehicle_seized": 7,
+    "persons_arrested": 6,
+    "notice_served": 10
+  },
+  {
+    "district": "Mayurbhanj",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 19,
+    "vehicle_seized": 28,
+    "persons_arrested": 22,
+    "notice_served": 35
+  },
+  {
+    "district": "Nabarangpur",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 7,
+    "vehicle_seized": 9,
+    "persons_arrested": 8,
+    "notice_served": 12
+  },
+  {
+    "district": "Nayagarh",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 10,
+    "vehicle_seized": 15,
+    "persons_arrested": 12,
+    "notice_served": 20
+  },
+  {
+    "district": "Nuapada",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 6,
+    "vehicle_seized": 8,
+    "persons_arrested": 7,
+    "notice_served": 10
+  },
+  {
+    "district": "Puri",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 17,
+    "vehicle_seized": 26,
+    "persons_arrested": 20,
+    "notice_served": 30
+  },
+  {
+    "district": "Rayagada",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 9,
+    "vehicle_seized": 13,
+    "persons_arrested": 10,
+    "notice_served": 15
+  },
+  {
+    "district": "Sambalpur",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 16,
+    "vehicle_seized": 22,
+    "persons_arrested": 18,
+    "notice_served": 28
+  },
+  {
+    "district": "Subarnapur",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 7,
+    "vehicle_seized": 10,
+    "persons_arrested": 8,
+    "notice_served": 14
+  },
+  {
+    "district": "Sundargarh",
+    "year": 2025,
+    "month": 8,
+    "cases_registered": 26,
+    "vehicle_seized": 38,
+    "persons_arrested": 30,
+    "notice_served": 42
+  },
+  {
+    "district": "Angul",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 17,
+    "vehicle_seized": 25,
+    "persons_arrested": 20,
+    "notice_served": 33
+  },
+  {
+    "district": "Balangir",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 14,
+    "vehicle_seized": 20,
+    "persons_arrested": 17,
+    "notice_served": 28
+  },
+  {
+    "district": "Balasore",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 28,
+    "vehicle_seized": 38,
+    "persons_arrested": 32,
+    "notice_served": 45
+  },
+  {
+    "district": "Bargarh",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 16,
+    "vehicle_seized": 22,
+    "persons_arrested": 18,
+    "notice_served": 30
+  },
+  {
+    "district": "Bhadrak",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 20,
+    "vehicle_seized": 28,
+    "persons_arrested": 22,
+    "notice_served": 38
+  },
+  {
+    "district": "Boudh",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 10,
+    "vehicle_seized": 12,
+    "persons_arrested": 10,
+    "notice_served": 18
+  },
+  {
+    "district": "Cuttack",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 32,
+    "vehicle_seized": 48,
+    "persons_arrested": 40,
+    "notice_served": 55
+  },
+  {
+    "district": "Deogarh",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 7,
+    "vehicle_seized": 10,
+    "persons_arrested": 8,
+    "notice_served": 12
+  },
+  {
+    "district": "Dhenkanal",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 15,
+    "vehicle_seized": 21,
+    "persons_arrested": 17,
+    "notice_served": 28
+  },
+  {
+    "district": "Gajapati",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 10,
+    "vehicle_seized": 14,
+    "persons_arrested": 11,
+    "notice_served": 20
+  },
+  {
+    "district": "Ganjam",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 42,
+    "vehicle_seized": 65,
+    "persons_arrested": 55,
+    "notice_served": 75
+  },
+  {
+    "district": "Jagatsinghpur",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 18,
+    "vehicle_seized": 26,
+    "persons_arrested": 21,
+    "notice_served": 35
+  },
+  {
+    "district": "Jajpur",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 30,
+    "vehicle_seized": 42,
+    "persons_arrested": 38,
+    "notice_served": 48
+  },
+  {
+    "district": "Jharsuguda",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 16,
+    "vehicle_seized": 22,
+    "persons_arrested": 19,
+    "notice_served": 28
+  },
+  {
+    "district": "Kalahandi",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 12,
+    "vehicle_seized": 18,
+    "persons_arrested": 14,
+    "notice_served": 22
+  },
+  {
+    "district": "Kandhamal",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 8,
+    "vehicle_seized": 12,
+    "persons_arrested": 9,
+    "notice_served": 14
+  },
+  {
+    "district": "Kendrapara",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 22,
+    "vehicle_seized": 32,
+    "persons_arrested": 28,
+    "notice_served": 40
+  },
+  {
+    "district": "Keonjhar",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 24,
+    "vehicle_seized": 35,
+    "persons_arrested": 30,
+    "notice_served": 42
+  },
+  {
+    "district": "Khordha",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 38,
+    "vehicle_seized": 58,
+    "persons_arrested": 48,
+    "notice_served": 65
+  },
+  {
+    "district": "Koraput",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 11,
+    "vehicle_seized": 16,
+    "persons_arrested": 12,
+    "notice_served": 20
+  },
+  {
+    "district": "Malkangiri",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 6,
+    "vehicle_seized": 9,
+    "persons_arrested": 7,
+    "notice_served": 12
+  },
+  {
+    "district": "Mayurbhanj",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 21,
+    "vehicle_seized": 30,
+    "persons_arrested": 24,
+    "notice_served": 38
+  },
+  {
+    "district": "Nabarangpur",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 8,
+    "vehicle_seized": 11,
+    "persons_arrested": 9,
+    "notice_served": 14
+  },
+  {
+    "district": "Nayagarh",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 12,
+    "vehicle_seized": 18,
+    "persons_arrested": 14,
+    "notice_served": 22
+  },
+  {
+    "district": "Nuapada",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 7,
+    "vehicle_seized": 10,
+    "persons_arrested": 8,
+    "notice_served": 12
+  },
+  {
+    "district": "Puri",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 19,
+    "vehicle_seized": 28,
+    "persons_arrested": 22,
+    "notice_served": 33
+  },
+  {
+    "district": "Rayagada",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 10,
+    "vehicle_seized": 15,
+    "persons_arrested": 11,
+    "notice_served": 18
+  },
+  {
+    "district": "Sambalpur",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 18,
+    "vehicle_seized": 25,
+    "persons_arrested": 20,
+    "notice_served": 30
+  },
+  {
+    "district": "Subarnapur",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 8,
+    "vehicle_seized": 12,
+    "persons_arrested": 9,
+    "notice_served": 15
+  },
+  {
+    "district": "Sundargarh",
+    "year": 2025,
+    "month": 9,
+    "cases_registered": 28,
+    "vehicle_seized": 40,
+    "persons_arrested": 32,
+    "notice_served": 45
+  }
+]

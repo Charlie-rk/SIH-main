@@ -81,10 +81,9 @@ import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-// --- AI Module Import ---
-import { analyzeSentiment, analyzeCaseDiary } from './ai/analysis.js';
+// Import our new CCTNS-specific AI functions
+import { generateAISummary, getPerformanceForecast } from './ai/analysis.js';
 
 // --- 1. DATA LOADING ---
 const __filename = fileURLToPath(import.meta.url);
@@ -104,37 +103,20 @@ function loadJsonFile(filename) {
   }
 }
 
-// Load all 5 data files on server start
-const prideDb = loadJsonFile('mock_data.json'); // 150 "Good Work" events
-const cctnsDb = loadJsonFile('mock_cctnsdata.json'); // 200 CCTNS cases
-const strengthDb = loadJsonFile('DistrictReport.json'); // 30 districts HR data
-const feedbackDb = loadJsonFile('publicfeedback.json'); // 150 sentiment entries
-const ipcDb = loadJsonFile('OdishaIPCCrimedata.json'); // Real IPC crime data
-const usersDb = loadJsonFile('users.json'); 
+// Load all 7 new CCTNS data files
+const convictionsDb = loadJsonFile('cctns_convictions.json');
+const nbwDb = loadJsonFile('cctns_nbw.json');
+const firearmsDb = loadJsonFile('cctns_firearms.json');
+const sandMiningDb = loadJsonFile('cctns_sand_mining.json');
+const missingPersonsDb = loadJsonFile('cctns_missing_persons.json');
+const pendencyDb = loadJsonFile('cctns_pendency.json');
+const preventiveDb = loadJsonFile('cctns_preventive_drives.json');
 
+// We still need our users file
+const usersDb = loadJsonFile('users.json');
+
+// Secret key for JWT. In a real app, this MUST be in a .env file.
 const JWT_SECRET = "YOUR_HACKATHON_SECRET_KEY";
-// Helper function to process the IPC data on start
-
-let analyticsDb = [];
-function loadAndProcessIPCData() {
-  const headers = ipcDb.fields.map(field => field.label);
-  analyticsDb = ipcDb.data.map(row => {
-    const entry = {};
-    headers.forEach((header, index) => {
-      const cleanKey = header.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/_$/, '');
-      const value = row[index];
-      // Convert numeric strings to actual numbers
-     if (cleanKey !== 'district' && !isNaN(value) && value.trim() !== '') {
-        entry[cleanKey] = Number(value);
-    } else {
-        entry[cleanKey] = value;
-        }
-    });
-    return entry;
-  });
-  console.log(`[Server] Real data loaded and processed: ${analyticsDb.length} records.`);
-}
-loadAndProcessIPCData();
 
 // --- 2. APP INITIALIZATION ---
 const app = express();
@@ -144,34 +126,27 @@ const PORT = process.env.PORT || 8000;
 app.use(cors());
 app.use(express.json());
 
-// Root (Health Check)
-app.get('/', (req, res) => res.json({ message: "Odisha Police Strategic Command API is running!" }));
+// --- 4. AUTHENTICATION (Using plain text as fixed) ---
 
-
-// --- 4. AUTHENTICATION ---
-
-/**
- * NEW: Login Endpoint
- * This is a PUBLIC endpoint.
- */
+// Login endpoint (Public)
 app.post('/api/auth/login', async (req, res) => {
   const { username, password } = req.body;
-  console.log(username,password);
-
-  // 1. Find the user in our mock DB
+  console.log(`[Auth] Login attempt: User: ${username}`);
+  
   const user = usersDb.find(u => u.username === username);
-  console.log(user);
   if (!user) {
+    console.log(`[Auth] FAILED: User not found.`);
     return res.status(401).json({ error: "Invalid username or password" });
   }
 
-  // 2. Compare the hashed password
-  // const isMatch = await bcrypt.compare(password, user.passwordHash);
-  // if (!isMatch) {
-  //   return res.status(401).json({ error: "Invalid username or password" });
-  // }
+  // Plain text password check
+  const isMatch = (password === user.password);
+  if (!isMatch) {
+    console.log(`[Auth] FAILED: Password incorrect.`);
+    return res.status(401).json({ error: "Invalid username or password" });
+  }
 
-  // 3. Create a JWT Token
+  // Create a JWT Token
   const userPayload = {
     id: user.id,
     username: user.username,
@@ -181,422 +156,234 @@ app.post('/api/auth/login', async (req, res) => {
 
   const token = jwt.sign(userPayload, JWT_SECRET, { expiresIn: '1h' });
 
-  // 4. Send the token and user info (without password)
-  res.json({
-    token,
-    user: userPayload
-  });
+  console.log(`[Auth] SUCCESS: Token generated for ${user.username}.`);
+  res.json({ token, user: userPayload });
 });
 
-
+// Auth Middleware (To protect routes)
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // Format: "Bearer TOKEN"
-
-  if (token == null) {
-    return res.sendStatus(401); // No token, unauthorized
-  }
+  const token = authHeader && authHeader.split(' ')[1];
+  if (token == null) return res.sendStatus(401);
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) {
-      return res.sendStatus(403); // Token is no longer valid
-    }
-    req.user = user; // Add the user payload to the request object
-    next(); // Proceed to the protected route
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
   });
 };
+
+// --- 5. NEW SECURED API ENDPOINTS (CCTNS) ---
 
 // === DGP (STATE-LEVEL) DASHBOARD ENDPOINTS ===
 
 /**
- * This new, single, reusable function calculates the "true" P.R.I.D.E. score
- * for all districts. Both our API endpoints will now use this.
+ * Feature: AI-Generated "Monthly Performance Summary" (NLP/NLG)
  */
-async function getPrideScoreLeaderboard() {
-  const districtScores = {};
-
-  // Initialize scores for all districts
-  Object.keys(strengthDb).forEach(district => {
-    districtScores[district] = { A: 0, B: 0, C_pos: 0, C_total: 0, score: 0 };
-  });
-
-  // A) Calculate Community Engagements (FIXED: Uses event.district)
-  prideDb.events.forEach(event => {
-    const district = event.district;
-    if (districtScores[district] && event.type === 'community_engagement') {
-      districtScores[district].A++;
-    }
-  });
-  
-  // B) Calculate "Beyond the Call" Nominations (FIXED: Uses event.district)
-  prideDb.events.forEach(event => {
-    const district = event.district;
-    if (districtScores[district] && (event.type === 'btc_nomination' || event.type === 'citizen_commendation')) {
-      districtScores[district].B++;
-    }
-  });
-
-  // C) Calculate Positive Sentiment Ratio (Async)
-  const sentimentPromises = feedbackDb.map(async (entry) => {
-    const result = await analyzeSentiment(entry.text);
-    return { district: entry.district, label: result.label };
-  });
-  const sentimentResults = await Promise.all(sentimentPromises);
-
-  sentimentResults.forEach(result => {
-    if (districtScores[result.district]) {
-      districtScores[result.district].C_total++;
-      if (result.label === 'POSITIVE') {
-        districtScores[result.district].C_pos++;
-      }
-    }
-  });
-
-  // Final Score Calculation
-  const finalLeaderboard = Object.keys(districtScores).map(district => {
-    const { A, B, C_pos, C_total } = districtScores[district];
-    const C_Ratio = (C_total === 0) ? 0 : (C_pos / C_total);
-    const score = Math.round((A * 0.4) + (B * 3) + (C_Ratio * 100 * 0.3));
-    return { district, score, A, B, C_Ratio: (C_Ratio * 100).toFixed(0) };
-  });
-
-  // Return the full, sorted data
-  return finalLeaderboard.sort((a, b) => b.score - a.score);
-}
-/**
- * Feature 1.1: P.R.I.D.E. Score Leaderboard (AI Weighted Model)
- */
-app.get('/api/ai/pride_score', authenticateToken, async (req, res) => {
-  if (req.user.role !== 'DGP') return res.sendStatus(403);
-  
-  // 1. Call our new, single helper function
-  const leaderboard = await getPrideScoreLeaderboard();
-  
-  // 2. Send the result
-  console.log(leaderboard); // Your console log
-  res.json(leaderboard);
-});
-
-
-
-/**
- * Feature 1.2: Correlation Analysis (AI Data Fusion with Year Output)
- */
-app.get('/api/ai/correlation', authenticateToken, async (req, res) => {
+app.get('/api/ai/monthly_summary', authenticateToken, (req, res) => {
   if (req.user.role !== 'DGP') return res.sendStatus(403);
 
-  const YEARS = [2012, 2013, 2014];
-
-  // 1. Get PRIDE leaderboard (latest normalized score)
-  const prideData = await getPrideScoreLeaderboard();
-  const prideScoreMap = new Map(prideData.map(d => [d.district, d.score]));
-
-  // 2. Group IPC crime by district & year
-  const crimesByYear = {}; 
-  YEARS.forEach(y => crimesByYear[y] = {});
-
-  analyticsDb
-    .filter(d => 
-      YEARS.includes(d.year) &&
-      d.district !== "Total" &&
-      d.district !== "G.R.P., Cuttack" &&
-      d.district !== "G.R.P., Rourkela"
-    )
-    .forEach(row => {
-      crimesByYear[row.year][row.district] = row.total_ipc_crimes;
-    });
-
-  // 3. Compute 3-year averages per district
-  const ipc_avg_by_district = {};
-
-  Object.keys(strengthDb).forEach(district => {
-    let values = [];
-
-    YEARS.forEach(y => {
-      if (crimesByYear[y][district] !== undefined) {
-        values.push(crimesByYear[y][district]);
-      }
-    });
-
-    if (values.length > 0) {
-      ipc_avg_by_district[district] = Math.round(
-        values.reduce((a, b) => a + b, 0) / values.length
-      );
-    } else {
-      ipc_avg_by_district[district] = 0;
-    }
-  });
-
-  // 4. Build final year-wise response
-  const finalData = [];
-
-  YEARS.forEach(year => {
-    Object.keys(crimesByYear[year]).forEach(district => {
-      finalData.push({
-        year: year,
-        district: district,
-        pride_score: prideScoreMap.get(district) || 0,
-        average_total_crime: ipc_avg_by_district[district] || 0,
-        yearly_crime: crimesByYear[year][district] || 0
-      });
-    });
-  });
-
-  // 5. Filter out zero/noise data
-  const cleaned = finalData.filter(d =>
-    d.pride_score > 0 &&
-    d.average_total_crime > 0 &&
-    d.yearly_crime > 0
-  );
-
-  console.log("CORRELATION DATA (YEAR + AVG) => \n", cleaned);
-
-  res.json(cleaned);
-});
-
-
-
-/**
- * Feature 1.3: Live Public Sentiment Trend (NLP)
- */
-app.get('/api/ai/sentiment_trends',authenticateToken, async (req, res) => {
-  const trendsByDate = {};
+  // Get data for the latest month (e.g., month 9)
+  const latestMonth = 9;
   
-  const promises = feedbackDb.map(item => analyzeSentiment(item.text));
-  const results = await Promise.all(promises);
-  
-  results.forEach((result, index) => {
-    const item = feedbackDb[index];
-    const date = item.date;
+  // 1. Find Top Conviction Rate
+  const topConviction = convictionsDb
+    .filter(d => d.month === latestMonth)
+    .sort((a, b) => b.ipc_bns_conviction_rate - a.ipc_bns_conviction_rate)[0];
+
+  // 2. Find Top NBW Execution
+  const topNBW = nbwDb
+    .filter(d => d.month === latestMonth)
+    .sort((a, b) => b.executed_total - a.executed_total)[0];
+
+  // 3. Find Top Narcotics (Ganja) Seizure
+  const topNarcotics = preventiveDb
+    .filter(d => d.month === latestMonth)
+    .sort((a, b) => b.narcotics_seizure_ganja_kg - a.narcotics_seizure_ganja_kg)[0];
     
-    if (!trendsByDate[date]) {
-      trendsByDate[date] = { positive: 0, negative: 0, neutral: 0 };
-    }
-    
-    if (result.label === 'POSITIVE') {
-      trendsByDate[date].positive++;
-    } else if (result.label === 'NEGATIVE') {
-      trendsByDate[date].negative++;
-    }
-  });
+  const topDistricts = {
+    conviction: { district: topConviction.district, value: topConviction.ipc_bns_conviction_rate.toFixed(1) },
+    nbw: { district: topNBW.district, value: topNBW.executed_total },
+    narcotics: { district: topNarcotics.district, value: topNarcotics.narcotics_seizure_ganja_kg.toFixed(0) }
+  };
 
-  // Format for charts
-  const chartData = Object.keys(trendsByDate).map(date => ({
-    date,
-    ...trendsByDate[date]
-  })).sort((a, b) => new Date(a.date) - new Date(b.date));
-  
-  res.json(chartData);
+  // 4. Generate the AI summary
+  const summary = generateAISummary(topDistricts);
+  res.json({ summary });
 });
 
 /**
- * Feature 1.4: AI-Powered "Smart Alert" System (ML)
+ * Feature: Performance Forecasting (ML "Districts to Watch")
  */
-app.get('/api/ai/smart_alerts',authenticateToken, (req, res) => {
-  const alerts = [];
-  const districts = Object.keys(strengthDb);
-  const crimeTypes = ['murder_section_302_ipc', 'rape_section_376_ipc', 'theft_section_379_382_ipc', 'robbery_section_392_394_397_398_ipc', 'dacoity_section_395_398_ipc', 'riots_section_147_148_149_151_ipc'];
-
-  districts.forEach(district => {
-    crimeTypes.forEach(crimeKey => {
-      const d_2012 = analyticsDb.find(d => d.district === district && d.year === 2012);
-      const d_2013 = analyticsDb.find(d => d.district === district && d.year === 2013);
-      const d_2014 = analyticsDb.find(d => d.district === district && d.year === 2014);
-
-      if (d_2012 && d_2013 && d_2014) {
-        const val_2012 = d_2012[crimeKey];
-        const val_2013 = d_2013[crimeKey];
-        const val_2014 = d_2014[crimeKey];
-        const avg = (val_2012 + val_2013) / 2;
-        
-        if (avg === 0 && val_2014 > 0) { // Handle division by zero
-          alerts.push({ type: 'red', text: `🔴 ALERT: ${crimeKey.split('_')[0]} in ${district} has spiked from 0 to ${val_2014}.` });
-        } else if (avg > 0) {
-          const diff = (val_2014 - avg) / avg;
-          if (diff > 0.20) { // 20% increase
-            alerts.push({ type: 'red', text: `🔴 ALERT: ${crimeKey.split('_')[0]} in ${district} is ${Math.round(diff * 100)}% above the 2-year average.` });
-          } else if (diff < -0.20) { // 20% decrease
-            alerts.push({ type: 'green', text: `🟢 INFO: ${crimeKey.split('_')[0]} in ${district} has decreased by ${Math.abs(Math.round(diff * 100))}% since 2013.` });
-          }
-        }
-      }
-    });
-  });
+app.get('/api/ai/performance_forecast', authenticateToken, (req, res) => {
+  if (req.user.role !== 'DGP') return res.sendStatus(403);
+  
+  // We use the pendency data for this forecast
+  // We pass the full DB and the metric we want to forecast
+  const alerts = getPerformanceForecast(pendencyDb, 'pendency_percentage');
   res.json(alerts);
 });
 
+/**
+ * Feature: "Special Drive" Leaderboards
+ * This is a dynamic endpoint for all drives.
+ */
+app.get('/api/drives/leaderboard/:metric', authenticateToken, (req, res) => {
+  if (req.user.role !== 'DGP') return res.sendStatus(403);
+  
+  const { metric } = req.params;
+  const latestMonth = 9; // Get latest month's data
+  let db;
+  let key = metric; // The key to sort by
+  
+  // Determine which DB to use
+  if (metric.startsWith('firearms_')) {
+    db = firearmsDb;
+    // Special key for total firearms
+    key = 'total_firearms_seized';
+  } else if (metric.startsWith('sand_')) {
+    db = sandMiningDb;
+    key = 'cases_registered';
+  } else if (metric.startsWith('narcotics_') || metric.startsWith('excise_') || metric.startsWith('opg_')) {
+    db = preventiveDb;
+  } else if (metric.startsWith('nbw_')) {
+    db = nbwDb;
+    key = 'executed_total';
+  } else {
+    return res.status(400).json({ error: 'Invalid metric' });
+  }
+
+  // Calculate the total for the metric
+  const data = db.filter(d => d.month === latestMonth)
+    .map(d => {
+      let value = 0;
+      if (metric === 'firearms_seized') {
+        value = (d.seizure_gun_rifle + d.seizure_pistol + d.seizure_revolver + d.seizure_mouzer + d.seizure_ak_47 + d.seizure_slr + d.seizure_others);
+      } else {
+        value = d[key] || 0;
+      }
+      return { district: d.district, value };
+    })
+    .sort((a, b) => b.value - a.value); // Sort descending
+
+  res.json(data);
+});
 
 /**
- * Feature 1.5: "Workload & Resource Analysis" (Data Fusion)
+ * Feature: Conviction Rate Leaderboard
  */
-app.get('/api/analytics/workload',authenticateToken, (req, res) => {
-  console.log("hitted \n");
-  const ipc_2014 = analyticsDb.filter(d => d.year === 2014 && d.district !== 'Total' && d.district !== 'G.R.P.');
+app.get('/api/analytics/conviction_rates', authenticateToken, (req, res) => {
+  if (req.user.role !== 'DGP') return res.sendStatus(403);
   
-  const workloadData = ipc_2014.map(crimeData => {
-    const district = crimeData.district;
-    const strengthData = strengthDb[district];
+  const latestMonth = 9;
+  const rates = convictionsDb
+    .filter(d => d.month === latestMonth)
+    .map(d => ({
+      district: d.district,
+      rate: d.ipc_bns_conviction_rate
+    }))
+    .sort((a, b) => b.rate - a.rate);
     
-    if (!strengthData) {
-      return { district, totalCrime: crimeData.total_ipc_crimes, totalOfficers: 0, ratio: "N/A" };
+  res.json(rates);
+});
+
+/**
+ * Feature: GIS / Geo-Analytics Map Data
+ */
+app.get('/api/analytics/map_data', authenticateToken, (req, res) => {
+  if (req.user.role !== 'DGP') return res.sendStatus(403);
+
+  const latestMonth = 9;
+  const metricsMap = {};
+
+  // 1. Initialize all districts with Conviction data
+  convictionsDb.filter(d => d.month === latestMonth).forEach(d => {
+    metricsMap[d.district] = {
+      conviction_rate: d.ipc_bns_conviction_rate,
+      nbw_executed: 0,
+      narcotics_ganja_kg: 0,
+      firearms_seized: 0
+    };
+  });
+
+  // 2. Add NBW data
+  nbwDb.filter(d => d.month === latestMonth).forEach(d => {
+    if (metricsMap[d.district]) {
+      metricsMap[d.district].nbw_executed = d.executed_total;
     }
-    
-    const totalCrime = crimeData.total_ipc_crimes;
-    const totalOfficers = strengthData.total_strength;
-    const ratio = (totalCrime / totalOfficers).toFixed(2);
-    
-    return { district, totalCrime, totalOfficers, ratio: parseFloat(ratio) };
-  }).sort((a, b) => b.ratio - a.ratio);
+  });
   
-  res.json(workloadData);
+  // 3. Add Narcotics data
+  preventiveDb.filter(d => d.month === latestMonth).forEach(d => {
+    if (metricsMap[d.district]) {
+      metricsMap[d.district].narcotics_ganja_kg = d.narcotics_seizure_ganja_kg;
+    }
+  });
+
+  // 4. Add Firearms data
+  firearmsDb.filter(d => d.month === latestMonth).forEach(d => {
+    if (metricsMap[d.district]) {
+      metricsMap[d.district].firearms_seized = 
+        d.seizure_gun_rifle + d.seizure_pistol + d.seizure_revolver + 
+        d.seizure_mouzer + d.seizure_ak_47 + d.seizure_slr + d.seizure_others;
+    }
+  });
+  
+  res.json(metricsMap);
 });
 
-
-/**
- * Feature 1.6: Granular HR Analytics
- */
-app.get('/api/analytics/hr',authenticateToken, (req, res) => {
-  // Simply return the raw, detailed strength data.
-  // The frontend will aggregate it for state-wide pie charts.
-  res.json(strengthDb);
-});
 
 // === SP (DISTRICT-LEVEL) DASHBOARD ENDPOINTS ===
 
 /**
- * Feature 2.1: The "Recognition Portal" (Data Feed)
+ * Feature: Get all data for a single district (for SP form pre-fill)
  */
-app.get('/api/pride/events/:district',authenticateToken, (req, res) => {
+app.get('/api/district_data/:district/:month', authenticateToken, (req, res) => {
   const { district } = req.params;
-  const events = prideDb.events.filter(event => {
-    // A simple text search for the district name in the summary
-    return event.summary.toLowerCase().includes(district.toLowerCase()) && 
-           (event.type === 'btc_nomination' || event.type === 'citizen_commendation');
-  });
-  res.json(events);
-});
-
-
-/**
- * Feature 2.1: The "Recognition Portal" (User Action)
- */
-app.post('/api/pride/approve/:eventId',authenticateToken, (req, res) => {
-  const { eventId } = req.params;
-  // Simulate a database write
-  console.log(`[Server] SP has approved commendation for event ID: ${eventId}. (Simulated)`);
-  res.json({ status: "approved", eventId: eventId });
-});
-
-
-
-// **
-//  * Feature 2.2: AI-Powered "Case Blocker" Analysis (NLP)
-//  */
-app.get('/api/ai/case_blockers/:district',authenticateToken, (req, res) => {
-  const { district } = req.params;
-  const pendingCases = cctnsDb.filter(c => 
-    c.district.toLowerCase() === district.toLowerCase() && 
-    c.status === 'Pending Investigation'
-  );
+  const m = parseInt(req.params.month, 10);
   
-  const blockers = {
-    "Awaiting Forensics": 0,
-    "Witness Unavailable": 0,
-    "Awaiting ISP Response": 0,
-    "CCTV Enhancement": 0,
-    "Bank Compliance": 0,
-    "Under Active Investigation": 0,
-    "No Summary": 0
+  // Security check: SP can only access their own district
+  if (req.user.role === 'SP' && req.user.district.toLowerCase() !== district.toLowerCase()) {
+    return res.status(403).json({ error: "Access denied." });
+  }
+  
+  const data = {
+    convictions: convictionsDb.find(d => d.district === district && d.month === m) || {},
+    nbw: nbwDb.find(d => d.district === district && d.month === m) || {},
+    firearms: firearmsDb.find(d => d.district === district && d.month === m) || {},
+    sand_mining: sandMiningDb.find(d => d.district === district && d.month === m) || {},
+    missing_persons: missingPersonsDb.find(d => d.district === district && d.month === m) || {},
+    pendency: pendencyDb.find(d => d.district === district && d.month === m) || {},
+    preventive: preventiveDb.find(d => d.district === district && d.month === m) || {}
   };
   
-  pendingCases.forEach(caseFile => {
-    const result = analyzeCaseDiary(caseFile.case_diary_summary);
-    blockers[result.tag]++;
-  });
-
-  // Format for charts
-  const chartData = Object.keys(blockers).map(name => ({ name, value: blockers[name] }));
-  res.json(chartData);
-});
-
-
-/**
- * Feature 2.3: Tactical Case Management KPIs
- */
-app.get('/api/cctns/kpis/:district', authenticateToken,(req, res) => {
-  const { district } = req.params;
-  const districtCases = cctnsDb.filter(c => c.district.toLowerCase() === district.toLowerCase());
-  
-  const totalCases = districtCases.length;
-  if (totalCases === 0) {
-    return res.json({ clearanceRate: 0, topCrimes: [] });
-  }
-
-  const solvedCases = districtCases.filter(c => c.status === 'Case Closed - Solved').length;
-  const clearanceRate = Math.round((solvedCases / totalCases) * 100);
-  
-  const crimeCounts = {};
-  districtCases.forEach(c => {
-    crimeCounts[c.crime_type] = (crimeCounts[c.crime_type] || 0) + 1;
-  });
-  
-  const topCrimes = Object.keys(crimeCounts).map(name => ({
-    name,
-    count: crimeCounts[name]
-  })).sort((a, b) => b.count - a.count).slice(0, 5);
-
-  // res.json({ clearanceRate, topCrimes });
-  res.json({ clearanceRate, topCrimes, totalCases });
-});
-
-
-/**
- * Feature 2.4: Positive Impact Map
- */
-app.get('/api/pride/map/:district',authenticateToken, (req, res) => {
-    const { district } = req.params;
-    const events = prideDb.events.filter(event => 
-      event.summary.toLowerCase().includes(district.toLowerCase())
-    );
-    res.json(events);
+  res.json(data);
 });
 
 /**
- * NEW: Top Performing Officers
+ * Feature: Submit "Good Work Done" Report
  */
-app.get('/api/ai/top_officers', authenticateToken, (req, res) => {
-  if (req.user.role !== 'DGP') return res.sendStatus(403);
-
-  const officerCounts = {};
-
-  // 1. Scan all "good work" events
-  prideDb.events.forEach(event => {
-    if (event.type === 'btc_nomination' || event.type === 'citizen_commendation') {
-      const officer = event.officer;
-      officerCounts[officer] = (officerCounts[officer] || 0) + 1;
-    }
-  });
-
-  // 2. Format and sort the data
-  const topOfficers = Object.keys(officerCounts).map(officer => ({
-    name: officer,
-    recognitions: officerCounts[officer]
-  }))
-  .sort((a, b) => b.recognitions - a.recognitions) // Sort descending
-  .slice(0, 10); // Get top 10
-
-  res.json(topOfficers);
+app.post('/api/cctns/report', authenticateToken, (req, res) => {
+  // We only allow SPs to submit data
+  if (req.user.role !== 'SP') return res.sendStatus(403);
+  
+  const reportData = req.body;
+  
+  // In a real app, we would save this to the database.
+  // For the hackathon, we just log it and send a success response.
+  console.log(`[Server] Received CCTNS report submission from SP ${req.user.username} for district ${req.user.district}`);
+  console.log(reportData);
+  
+  // Here you would write to the JSON files (or a DB)
+  // fs.writeFileSync(...)
+  
+  res.json({ status: "success", message: "Report submitted successfully." });
 });
 
-// --- 5. START THE SERVER ---
+
+// --- 6. START THE SERVER ---
 app.listen(PORT, async () => {
   console.log(`[Server] Backend server is running on http://localhost:${PORT}`);
-  
-  // Pre-warm AI model on start so the first API call isn't slow
-  console.log("[Server] Pre-warming AI Sentiment model...");
-  await analyzeSentiment("Pre-load test");
-  console.log("[Server] AI Sentiment model is warm and ready.");
-  
-  console.log("\n[Server] All 5 data files loaded. All 10 API endpoints are live.");
+  console.log("\n[Server] All 8 CCTNS-compliant data files loaded.");
   console.log("[Server] Ready for connections.");
 });
