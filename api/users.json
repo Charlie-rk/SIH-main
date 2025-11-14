@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "username": "dgp_odisha",
+    "password": "dgp123",
+    "role": "DGP",
+    "district": "all"
+  },
+  {
+    "id": 2,
+    "username": "sp_khordha",
+    "password": "sp123",
+    "role": "SP",
+    "district": "Khordha"
+  },
+  {
+    "id": 3,
+    "username": "sp_cuttack",
+    "password": "sp123",
+    "role": "SP",
+    "district": "Cuttack"
+  },
+  {
+    "id": 4,
+    "username": "sp_ganjam",
+    "password": "sp123",
+    "role": "SP",
+    "district": "Ganjam"
+  }
+]
