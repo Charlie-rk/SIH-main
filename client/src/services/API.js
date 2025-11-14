@@ -2,6 +2,7 @@ import axios from 'axios';
 
 // Set the base URL for our backend
 const API_URL = 'http://localhost:8000';
+const LATEST_MONTH =9;
 
 const api = axios.create({
   baseURL: API_URL
@@ -110,5 +111,38 @@ export const getDistrictData = async (district, month) => {
  */
 export const postCctnsReport = async (reportData) => {
   const { data } = await api.post('/api/cctns/report', reportData);
+  return data;
+};
+
+
+
+export const uploadCctnsFile = async (file, reportType) => {
+  const formData = new FormData();
+  formData.append('reportFile', file); // The backend expects 'reportFile'
+
+  const { data } = await api.post(`/api/cctns/upload/${reportType}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return data;
+};
+
+
+// NEW: Trends
+export const getTrend = async (metric = 'narcotics_ganja_kg', months = 6, top = 5) => {
+  const { data } = await api.get(`/api/trends/${metric}?months=${months}&top=${top}`);
+  return data;
+};
+
+export const getTopDistricts = async (metric = 'narcotics_ganja_kg', months = 6, top = 5) => {
+  const { data } = await api.get(`/api/trends/top/${metric}?months=${months}&top=${top}`);
+  return data;
+};
+
+
+export const fetchGoodWorkReport = async () => {
+  const { data } = await api.get('/api/reports/good-work-done');
+  console.log(data);
   return data;
 };

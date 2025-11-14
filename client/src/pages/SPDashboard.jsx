@@ -3,21 +3,25 @@ import {
   BarChart, Bar, PieChart, Pie, Cell, LineChart, Line, AreaChart, Area,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   RadialBarChart, RadialBar, FunnelChart, Funnel, LabelList,
-  PolarGrid       // <-- ADD THIS
+  PolarGrid
 } from 'recharts';
 
 import {
   Shield, BarChart3, RefreshCw, Download, Calendar, Filter, Eye,
   Database, MapPin, Edit, Send, CheckCircle, Clock, Users, Search,
-  FileText, Home, Truck, Waves, UserCheck // Added new icons
+  FileText, Home, Truck, Waves, UserCheck // All icons are here
 } from 'lucide-react';
 
-// Import all our NEW CCTNS API functions
+// Import libraries for export
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import * as XLSX from 'xlsx';
+
+// Import your actual API functions
 import * as api from '../services/API';
-import { useAuth } from '../context/AuthContext'; // To get user info
+import { useAuth } from '../context/AuthContext';
 
-// --- REUSABLE UI COMPONENTS (Your beautiful style) ---
-
+// --- REUSABLE UI COMPONENTS ---
 const DashboardCard = ({ title, icon, children, gridSpan = "col-span-1", delay = 0, height = "h-[400px]" }) => {
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
@@ -64,7 +68,6 @@ const LoadingSpinner = () => (
 );
 
 // --- FORM STYLING ---
-// Reusable components for the CCTNS data entry forms
 const FormSection = ({ title, children }) => (
   <div className="mb-6">
     <h3 className="text-lg font-semibold text-gray-700 border-b border-gray-300 pb-2 mb-4">{title}</h3>
@@ -87,10 +90,7 @@ const FormInput = ({ label, value, onChange, name, type = "number" }) => (
   </div>
 );
 
-
 // --- SP DASHBOARD WIDGETS ---
-
-// --- WIDGET 1: Pendency Gauge ---
 const PendencyGaugeWidget = ({ data }) => {
   const percentage = data.pendency_percentage || 0;
   const color = percentage > 40 ? '#ef4444' : percentage > 30 ? '#f59e0b' : '#10b981';
@@ -132,7 +132,6 @@ const PendencyGaugeWidget = ({ data }) => {
   );
 };
 
-// --- WIDGET 2: NBW Drive Funnel ---
 const NbwFunnelWidget = ({ data }) => {
   const funnelData = [
     { name: 'Total NBWs', value: data.total_nbw || 0, fill: '#3b82f6' },
@@ -154,7 +153,6 @@ const NbwFunnelWidget = ({ data }) => {
   );
 };
 
-// --- WIDGET 3: Missing Persons Tracker ---
 const MissingPersonsWidget = ({ data }) => {
   const chartData = [
     { name: 'Boys', Missing: data.boy_missing_start, Traced: data.boy_traced },
@@ -187,17 +185,167 @@ const MissingPersonsWidget = ({ data }) => {
   );
 };
 
+// --- NEW: Smart Upload Widget (integrated from File 1) ---
+const SmartUploadWidget = ({ onUploadSuccess }) => {
+  const [file, setFile] = useState(null);
+  const [reportType, setReportType] = useState('nbw'); // Default to NBW
+  const [isUploading, setIsUploading] = useState(false);
+  const [message, setMessage] = useState(null);
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+    setMessage(null);
+  };
+
+  const handleUpload = async () => {
+    if (!file) {
+      setMessage({ type: 'error', text: 'Please select a file first.' });
+      return;
+    }
+    
+    setIsUploading(true);
+    setMessage(null);
+    
+    try {
+      // Reuses the API from ../services/API
+      const res = await api.uploadCctnsFile(file, reportType);
+      
+      // Call the callback function from the parent (SPDashboard)
+      onUploadSuccess(reportType, res.data);
+      
+      setMessage({ type: 'success', text: res.message || 'File parsed successfully.' });
+      setFile(null); // Clear the file input
+      
+    } catch (err) {
+      console.error("Upload failed:", err);
+      setMessage({ type: 'error', text: err.response?.data?.error || "Upload failed." });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  return (
+    <DashboardCard title="Smart Report Upload (AI)" icon={<FileText />} height="h-[300px]">
+      <div className="h-full flex flex-col justify-between">
+        <div>
+          <label className="text-xs font-medium text-gray-500 mb-1 block">1. Select Report Type</label>
+          <select
+            value={reportType}
+            onChange={(e) => setReportType(e.target.value)}
+            className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="nbw">Part 1a: NBW Drive</option>
+            <option value="firearms" disabled>Part 1b: Firearms (Coming Soon)</option>
+            <option value="sand_mining" disabled>Part 1c: Sand Mining (Coming Soon)</option>
+          </select>
+
+          <label className="text-xs font-medium text-gray-500 mt-4 mb-1 block">2. Upload File (PDF/Excel)</label>
+          <div className="relative p-4 border-2 border-dashed border-gray-300 rounded-lg text-center">
+            <FileText className="mx-auto h-10 w-10 text-gray-400" />
+            <span className="mt-2 block text-sm text-gray-600">
+              {file ? file.name : "Drag & Drop or Click to Browse"}
+            </span>
+            <input
+              type="file"
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              onChange={handleFileChange}
+              accept=".pdf,.xlsx,.xls"
+            />
+          </div>
+        </div>
+
+        {message && (
+          <div className={`p-2 rounded-md text-sm text-center ${message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+            {message.text}
+          </div>
+        )}
+
+        <button
+          onClick={handleUpload}
+          disabled={!file || isUploading}
+          className="w-full p-3 gradient-blue text-white font-bold rounded-lg transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        >
+          {isUploading ? (
+            <>
+              <RefreshCw className="animate-spin" />
+              Parsing...
+            </>
+          ) : (
+            "Upload & Auto-Fill Form"
+          )}
+        </button>
+      </div>
+    </DashboardCard>
+  );
+};
+
+
+// --- Helper constant for report generation ---
+const reportFieldMapping = {
+  nbw: {
+    title: "Part 1a: NBW Drive",
+    fields: {
+      pending_start_of_month: "Pending (Start)",
+      received_this_month: "Received This Month",
+      executed_total: "Executed (Total)",
+      disposed_total: "Disposed (Total)",
+      pending_end_of_month: "Pending (End)",
+      executed_old_cases: "Executed (Old Cases)"
+    }
+  },
+  firearms: {
+    title: "Part 1b: Firearms Drive",
+    fields: {
+      cases_registered: "Cases Registered",
+      persons_arrested: "Persons Arrested",
+      seizure_pistol: "Pistols Seized",
+      seizure_ammunition: "Ammunition Seized",
+      seizure_ak_47: "AK-47 Seized"
+    }
+  },
+  sand_mining: {
+    title: "Part 1c: Sand Mining Drive",
+    fields: {
+      cases_registered: "Cases Registered",
+      vehicle_seized: "Vehicles Seized",
+      persons_arrested: "Persons Arrested"
+    }
+  },
+  preventive: {
+    title: "Part 1g: Narcotics Drive",
+    fields: {
+      narcotics_cases_registered: "Cases Registered",
+      narcotics_persons_arrested: "Persons Arrested",
+      narcotics_seizure_ganja_kg: "Ganja Seized (Kg)",
+      narcotics_seizure_brownsugar_gm: "Brownsugar (gm)",
+      narcotics_seizure_vehicles: "Vehicles Seized"
+    }
+  },
+  convictions: {
+    title: "Part 2: Convictions",
+    fields: {
+      ipc_bns_trial_completed: "IPC Trial Completed",
+      ipc_bns_conviction: "IPC Conviction",
+      ipc_bns_acquitted: "IPC Acquitted",
+      sll_trial_completed: "SLL Trial Completed",
+      sll_conviction: "SLL Conviction",
+      speedy_trial_convictions: "Speedy Trial Convictions"
+    }
+  }
+};
 
 // --- Main SP Dashboard Component ---
 function SPDashboard() {
-  const { user } = useAuth(); // Get logged-in user (e.g., { role: 'SP', district: 'Khordha' })
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [month, setMonth] = useState(9); // Default to latest month (September)
+  const [month, setMonth] = useState(9);
   
-  // This one state will hold all 7 data objects
   const [formData, setFormData] = useState({});
-  const [kpiData, setKpiData] = useState({}); // For the charts
+  const [kpiData, setKpiData] = useState({});
+
+  const [showSubmitMenu, setShowSubmitMenu] = useState(false);
+  const submitMenuRef = useRef(null);
   
   // --- Data Fetching ---
   const fetchData = async () => {
@@ -205,8 +353,8 @@ function SPDashboard() {
     
     try {
       const data = await api.getDistrictData(user.district, month);
-      setFormData(data); // Set the data for the forms
-      setKpiData(data); // Set the data for the charts
+      setFormData(data);
+      setKpiData(data);
     } catch (err) {
       console.error("Error fetching SP data:", err);
       alert(`Failed to fetch data: ${err.response?.data?.error || err.message}`);
@@ -219,7 +367,19 @@ function SPDashboard() {
   useEffect(() => {
     setLoading(true);
     fetchData();
-  }, [user, month]); // Refetch if user or month changes
+  }, [user, month]);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (submitMenuRef.current && !submitMenuRef.current.contains(event.target)) {
+        setShowSubmitMenu(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [submitMenuRef]);
 
   const handleRefresh = () => {
     setRefreshing(true);
@@ -228,7 +388,7 @@ function SPDashboard() {
 
   // --- Form Handling ---
   const handleFormChange = (formName, e) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
     setFormData(prev => ({
       ...prev,
       [formName]: {
@@ -241,7 +401,6 @@ function SPDashboard() {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      // Add user/month info to the report
       const reportData = {
         ...formData,
         district: user.district,
@@ -256,18 +415,397 @@ function SPDashboard() {
     }
     setLoading(false);
   };
-  
+
+  // --- NEW: handler for upload success from SmartUploadWidget (from File 1) ---
+  const handleUploadSuccess = (reportType, parsedData) => {
+    // `reportType` is 'nbw', `parsedData` is the JSON object from the AI
+    setFormData(prev => ({
+      ...prev,
+      [reportType]: parsedData
+    }));
+    
+    // Also update the kpiData to refresh the charts
+    setKpiData(prev => ({
+      ...prev,
+      [reportType]: parsedData
+    }));
+    
+    alert("Success! The form has been pre-filled with the data from your file.");
+  };
+
+  const handleSubmitFromMenu = () => {
+    handleSubmit();
+    setShowSubmitMenu(false);
+  };
+
+  // --- Helper function to get report metadata ---
+  const getReportMetadata = () => {
+    const monthName = new Date(2025, month - 1, 1).toLocaleString('default', { month: 'long' });
+    const district = user.district || "Unknown";
+    const title = `CCTNS "Good Work Done" Report - ${district}`;
+    const subtitle = `Month: ${monthName} 2025`;
+    const filename = `CCTNS_Report_${district}_${monthName}`;
+    return { title, subtitle, filename, monthName, district };
+  };
+
+  // --- ENHANCED PDF Export ---
+  const handleExportPDF = () => {
+    try {
+      const { title, subtitle, filename, district } = getReportMetadata();
+      const doc = new jsPDF();
+      let startY = 25;
+
+      // Add Header with background
+      doc.setFillColor(102, 126, 234);
+      doc.rect(0, 0, 210, 35, 'F');
+      
+      // Add Title
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(20);
+      doc.setFont(undefined, 'bold');
+      doc.text(title, 105, 15, { align: 'center' });
+      
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'normal');
+      doc.text(subtitle, 105, 23, { align: 'center' });
+      doc.text(`District: ${district}`, 105, 29, { align: 'center' });
+      
+      doc.setTextColor(0, 0, 0);
+      startY = 45;
+
+      // Iterate over the form sections
+      for (const formKey in reportFieldMapping) {
+        if (!reportFieldMapping.hasOwnProperty(formKey)) continue;
+
+        const section = reportFieldMapping[formKey];
+        const data = formData[formKey] || {};
+        
+        // Check if we need a new page
+        if (startY > 250) {
+          doc.addPage();
+          startY = 20;
+        }
+        
+        // Add section title with background
+        doc.setFillColor(240, 240, 250);
+        doc.rect(14, startY - 7, 182, 10, 'F');
+        doc.setFontSize(13);
+        doc.setFont(undefined, 'bold');
+        doc.setTextColor(76, 75, 105);
+        doc.text(section.title, 16, startY);
+        doc.setTextColor(0, 0, 0);
+        
+        startY += 8;
+        
+        const tableHead = [['Metric', 'Value']];
+        const tableBody = [];
+
+        // Populate table body from mapping
+        for (const fieldKey in section.fields) {
+          if (section.fields.hasOwnProperty(fieldKey)) {
+            tableBody.push([
+              section.fields[fieldKey],
+              String(data[fieldKey] || 0)
+            ]);
+          }
+        }
+
+        // Call autoTable
+        autoTable(doc, {
+          startY: startY,
+          head: tableHead,
+          body: tableBody,
+          theme: 'striped',
+          headStyles: { 
+            fillColor: [76, 75, 105],
+            fontSize: 11,
+            fontStyle: 'bold',
+            halign: 'left'
+          },
+          bodyStyles: {
+            fontSize: 10
+          },
+          columnStyles: {
+            0: { cellWidth: 130, halign: 'left' },
+            1: { cellWidth: 45, halign: 'right', fontStyle: 'bold' }
+          },
+          margin: { left: 14, right: 14 },
+          alternateRowStyles: { fillColor: [245, 247, 250] }
+        });
+        
+        startY = doc.lastAutoTable.finalY + 12;
+      }
+
+      // Add footer
+      const pageCount = doc.internal.getNumberOfPages();
+      for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(9);
+        doc.setTextColor(128, 128, 128);
+        doc.text(
+          `Page ${i} of ${pageCount} | Generated on ${new Date().toLocaleString()}`,
+          105,
+          285,
+          { align: 'center' }
+        );
+      }
+
+      doc.save(`${filename}.pdf`);
+      setShowSubmitMenu(false);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      alert("An error occurred while generating the PDF. Please check the console for details.");
+      setShowSubmitMenu(false);
+    }
+  };
+
+  // --- ENHANCED CSV Export ---
+  const handleExportCSV = () => {
+    try {
+      const { title, subtitle, filename, district, monthName } = getReportMetadata();
+      let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // Add BOM for Excel compatibility
+      
+      // Header section
+      csvContent += `"${title}"\r\n`;
+      csvContent += `"${subtitle}"\r\n`;
+      csvContent += `"District: ${district}"\r\n`;
+      csvContent += `"Generated: ${new Date().toLocaleString()}"\r\n`;
+      csvContent += `\r\n`;
+
+      // Iterate over the form sections
+      for (const formKey in reportFieldMapping) {
+        if (!reportFieldMapping.hasOwnProperty(formKey)) continue;
+
+        const section = reportFieldMapping[formKey];
+        const data = formData[formKey] || {};
+        
+        csvContent += `"${section.title}"\r\n`;
+        csvContent += `"Metric","Value"\r\n`;
+
+        // Populate CSV rows
+        for (const fieldKey in section.fields) {
+          if (section.fields.hasOwnProperty(fieldKey)) {
+            const label = section.fields[fieldKey];
+            const value = data[fieldKey] || 0;
+            csvContent += `"${label}","${value}"\r\n`;
+          }
+        }
+        csvContent += `\r\n\r\n`; // Double space between sections
+      }
+      
+      // Add footer
+      csvContent += `"Report generated by District Command Center"\r\n`;
+      
+      // Create and trigger download link
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `${filename}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      setShowSubmitMenu(false);
+    } catch (error) {
+      console.error("Error generating CSV:", error);
+      alert("An error occurred while generating the CSV. Please check the console for details.");
+      setShowSubmitMenu(false);
+    }
+  };
+
+  // --- ENHANCED Excel Export ---
+  const handleExportExcel = () => {
+    try {
+      const { title, subtitle, filename, district, monthName } = getReportMetadata();
+      
+      const wb = XLSX.utils.book_new();
+      let ws_data = [];
+      
+      // Header section with spacing
+      ws_data.push([title]);
+      ws_data.push([subtitle]);
+      ws_data.push([`District: ${district}`]);
+      ws_data.push([`Generated: ${new Date().toLocaleString()}`]);
+      ws_data.push([]); // Spacer
+      ws_data.push([]); // Double spacer
+
+      let currentRow = 6; // Track row index
+
+      // Iterate over the form sections
+      for (const formKey in reportFieldMapping) {
+        if (!reportFieldMapping.hasOwnProperty(formKey)) continue;
+
+        const section = reportFieldMapping[formKey];
+        const data = formData[formKey] || {};
+        
+        // Add section title (merged cell)
+        ws_data.push([section.title]);
+        currentRow++;
+        
+        // Add table headers
+        ws_data.push(["Metric", "Value"]);
+        const headerRow = currentRow;
+        currentRow++;
+
+        // Populate Excel rows
+        for (const fieldKey in section.fields) {
+          if (section.fields.hasOwnProperty(fieldKey)) {
+            const label = section.fields[fieldKey];
+            const value = data[fieldKey] || 0;
+            ws_data.push([label, value]);
+            currentRow++;
+          }
+        }
+        ws_data.push([]); // Spacer between sections
+        ws_data.push([]); // Double spacer
+        currentRow += 2;
+      }
+      
+      // Add footer
+      ws_data.push([]);
+      ws_data.push(["Report generated by District Command Center"]);
+      
+      const ws = XLSX.utils.aoa_to_sheet(ws_data);
+      
+      // Apply styling
+      const range = XLSX.utils.decode_range(ws['!ref']);
+      
+      // Style title (row 0)
+      if(ws["A1"]) ws["A1"].s = { 
+        font: { bold: true, sz: 16, color: { rgb: "FFFFFF" } },
+        fill: { fgColor: { rgb: "667EEA" } },
+        alignment: { horizontal: "center", vertical: "center" }
+      };
+      
+      // Style subtitle (row 1)
+      if(ws["A2"]) ws["A2"].s = { 
+        font: { bold: true, sz: 12 },
+        alignment: { horizontal: "center" }
+      };
+      
+      // Style district info (row 2)
+      if(ws["A3"]) ws["A3"].s = { 
+        font: { sz: 11 },
+        alignment: { horizontal: "center" }
+      };
+      
+      // Style generated date (row 3)
+      if(ws["A4"]) ws["A4"].s = { 
+        font: { sz: 10, italic: true },
+        fill: { fgColor: { rgb: "F0F0FA" } },
+        alignment: { horizontal: "center" }
+      };
+
+      // Style section titles and headers
+      let rowIdx = 7; // Start after header section
+      for (const formKey in reportFieldMapping) {
+        if (!reportFieldMapping.hasOwnProperty(formKey)) continue;
+        
+        const section = reportFieldMapping[formKey];
+        const data = formData[formKey] || {};
+        const fieldCount = Object.keys(section.fields).length;
+        
+        // Section title styling
+        const sectionCell = `A${rowIdx}`;
+        if(ws[sectionCell]) {
+          ws[sectionCell].s = { 
+            font: { bold: true, sz: 13, color: { rgb: "4C4B69" } },
+            fill: { fgColor: { rgb: "E0E7FF" } },
+            alignment: { horizontal: "left", vertical: "center" },
+            border: {
+              bottom: { style: "medium", color: { rgb: "667EEA" } }
+            }
+          };
+        }
+        rowIdx++;
+        
+        // Header row styling
+        const headerCellA = `A${rowIdx}`;
+        const headerCellB = `B${rowIdx}`;
+        if(ws[headerCellA]) {
+          ws[headerCellA].s = { 
+            font: { bold: true, sz: 11, color: { rgb: "FFFFFF" } },
+            fill: { fgColor: { rgb: "4C4B69" } },
+            alignment: { horizontal: "center", vertical: "center" }
+          };
+        }
+        if(ws[headerCellB]) {
+          ws[headerCellB].s = { 
+            font: { bold: true, sz: 11, color: { rgb: "FFFFFF" } },
+            fill: { fgColor: { rgb: "4C4B69" } },
+            alignment: { horizontal: "center", vertical: "center" }
+          };
+        }
+        rowIdx++;
+        
+        // Data row styling with alternating colors
+        for (let i = 0; i < fieldCount; i++) {
+          const cellA = `A${rowIdx}`;
+          const cellB = `B${rowIdx}`;
+          const fillColor = i % 2 === 0 ? "FFFFFF" : "F5F7FA";
+          
+          if(ws[cellA]) {
+            ws[cellA].s = { 
+              fill: { fgColor: { rgb: fillColor } },
+              alignment: { horizontal: "left", vertical: "center" },
+              border: {
+                bottom: { style: "thin", color: { rgb: "E5E7EB" } }
+              }
+            };
+          }
+          if(ws[cellB]) {
+            ws[cellB].s = { 
+              fill: { fgColor: { rgb: fillColor } },
+              alignment: { horizontal: "right", vertical: "center" },
+              font: { bold: true },
+              border: {
+                bottom: { style: "thin", color: { rgb: "E5E7EB" } }
+              }
+            };
+          }
+          rowIdx++;
+        }
+        rowIdx += 2; // Skip spacer rows
+      }
+
+      // Set column widths
+      ws['!cols'] = [
+        { wch: 45 }, // Metric column
+        { wch: 15 }  // Value column
+      ];
+      
+      // Set row heights
+      ws['!rows'] = [];
+      ws['!rows'][0] = { hpt: 25 }; // Title row
+      ws['!rows'][1] = { hpt: 20 }; // Subtitle row
+
+      // Merge cells for title
+      if (!ws['!merges']) ws['!merges'] = [];
+      ws['!merges'].push({ s: { r: 0, c: 0 }, e: { r: 0, c: 1 } }); // Merge A1:B1
+      ws['!merges'].push({ s: { r: 1, c: 0 }, e: { r: 1, c: 1 } }); // Merge A2:B2
+      ws['!merges'].push({ s: { r: 2, c: 0 }, e: { r: 2, c: 1 } }); // Merge A3:B3
+      ws['!merges'].push({ s: { r: 3, c: 0 }, e: { r: 3, c: 1 } }); // Merge A4:B4
+
+      XLSX.utils.book_append_sheet(wb, ws, "CCTNS Report");
+      XLSX.writeFile(wb, `${filename}.xlsx`);
+
+      setShowSubmitMenu(false);
+    } catch (error) {
+      console.error("Error generating Excel:", error);
+      alert("An error occurred while generating the Excel. Please check the console for details.");
+      setShowSubmitMenu(false);
+    }
+  };
+
   if (loading && !refreshing) {
     return <LoadingSpinner />;
   }
   
-  // Destructure for easier access
   const { convictions, nbw, firearms, sand_mining, missing_persons, pendency, preventive } = formData;
 
   return (
     <div className="min-h-screen gradient-mesh">
       <style jsx>{`
-        /* --- Your exact styling from DGP dashboard --- */
         .gradient-mesh { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); background-size: cover; background-attachment: fixed; }
         .gradient-mesh::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(240, 249, 255, 0.95) 0%, rgba(224, 242, 254, 0.95) 25%, rgba(224, 231, 255, 0.95) 50%, rgba(219, 234, 254, 0.95) 100%); z-index: -1; }
         .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15); }
@@ -338,6 +876,11 @@ function SPDashboard() {
           <MissingPersonsWidget data={kpiData.missing_persons || {}} />
         </div>
 
+        {/* NEW: Smart Upload widget (from File 1) */}
+        <div className="mb-6">
+          <SmartUploadWidget onUploadSuccess={handleUploadSuccess} />
+        </div>
+
         {/* Row 2: CCTNS Data Entry & Report Generation */}
         <div className="glass-card rounded-2xl p-6">
           <div className="flex items-center justify-between mb-6">
@@ -350,19 +893,67 @@ function SPDashboard() {
                 <p className="text-sm text-gray-500 mt-1">Submit your district's monthly data here.</p>
               </div>
             </div>
-            <button 
-              onClick={handleSubmit}
-              className="px-4 py-2 gradient-success text-white rounded-xl shadow-lg text-sm font-medium hover:shadow-xl transition-all flex items-center gap-2"
-            >
-              <Send className="w-4 h-4" />
-              Submit Report to DGP
-            </button>
+
+            {/* Dropdown Button */}
+            <div className="relative" ref={submitMenuRef}>
+              <button
+                onClick={() => setShowSubmitMenu(!showSubmitMenu)}
+                className="px-4 py-2 gradient-success text-white rounded-xl shadow-lg text-sm font-medium hover:shadow-xl transition-all flex items-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                Submit / Export Report
+              </button>
+              
+              {showSubmitMenu && (
+                <div className="absolute right-0 mt-2 w-56 glass-card rounded-xl shadow-2xl z-50 p-2">
+                  <ul className="space-y-1">
+                    <li>
+                      <button
+                        onClick={handleSubmitFromMenu}
+                        className="w-full text-left flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-100"
+                      >
+                        <Send className="w-4 h-4 text-blue-500" />
+                        Submit to DGP
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={handleExportPDF}
+                        className="w-full text-left flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-100"
+                      >
+                        <FileText className="w-4 h-4 text-red-500" />
+                        Download as PDF
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={handleExportCSV}
+                        className="w-full text-left flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-100"
+                      >
+                        <Database className="w-4 h-4 text-blue-700" />
+                        Download as CSV
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={handleExportExcel}
+                        className="w-full text-left flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-100"
+                      >
+                        <FileText className="w-4 h-4 text-green-600" />
+                        Download as Excel
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+
           </div>
           
-          {/* This is a simple tab-like structure. We can add a real tab component later. */}
+          {/* Form sections */}
           <div className="h-[600px] overflow-y-auto custom-scrollbar pr-2">
             
-            {/* --- PART 1a: NBW --- */}
+            {/* PART 1a: NBW */}
             <FormSection title="Part 1a: NBW Drive">
               <FormInput label="Pending (Start)" name="pending_start_of_month" value={nbw?.pending_start_of_month} onChange={e => handleFormChange('nbw', e)} />
               <FormInput label="Received This Month" name="received_this_month" value={nbw?.received_this_month} onChange={e => handleFormChange('nbw', e)} />
@@ -372,7 +963,7 @@ function SPDashboard() {
               <FormInput label="Executed (Old Cases)" name="executed_old_cases" value={nbw?.executed_old_cases} onChange={e => handleFormChange('nbw', e)} />
             </FormSection>
 
-            {/* --- PART 1b: Firearms --- */}
+            {/* PART 1b: Firearms */}
             <FormSection title="Part 1b: Firearms Drive">
               <FormInput label="Cases Registered" name="cases_registered" value={firearms?.cases_registered} onChange={e => handleFormChange('firearms', e)} />
               <FormInput label="Persons Arrested" name="persons_arrested" value={firearms?.persons_arrested} onChange={e => handleFormChange('firearms', e)} />
@@ -381,28 +972,28 @@ function SPDashboard() {
               <FormInput label="AK-47 Seized" name="seizure_ak_47" value={firearms?.seizure_ak_47} onChange={e => handleFormChange('firearms', e)} />
             </FormSection>
 
-            {/* --- PART 1c: Sand Mining --- */}
+            {/* PART 1c: Sand Mining */}
             <FormSection title="Part 1c: Sand Mining Drive">
               <FormInput label="Cases Registered" name="cases_registered" value={sand_mining?.cases_registered} onChange={e => handleFormChange('sand_mining', e)} />
               <FormInput label="Vehicles Seized" name="vehicle_seized" value={sand_mining?.vehicle_seized} onChange={e => handleFormChange('sand_mining', e)} />
               <FormInput label="Persons Arrested" name="persons_arrested" value={sand_mining?.persons_arrested} onChange={e => handleFormChange('sand_mining', e)} />
             </FormSection>
             
-            {/* --- PART 1g: Narcotics --- */}
+            {/* PART 1g: Narcotics */}
             <FormSection title="Part 1g: Narcotics Drive">
               <FormInput label="Cases Registered" name="narcotics_cases_registered" value={preventive?.narcotics_cases_registered} onChange={e => handleFormChange('preventive', e)} />
               <FormInput label="Persons Arrested" name="narcotics_persons_arrested" value={preventive?.narcotics_persons_arrested} onChange={e => handleFormChange('preventive', e)} />
               <FormInput label="Ganja Seized (Kg)" name="narcotics_seizure_ganja_kg" value={preventive?.narcotics_seizure_ganja_kg} onChange={e => handleFormChange('preventive', e)} />
               <FormInput label="Brownsugar (gm)" name="narcotics_seizure_brownsugar_gm" value={preventive?.narcotics_seizure_brownsugar_gm} onChange={e => handleFormChange('preventive', e)} />
-              <FormInput label="Vehicles Seized" name="narcotics_seizure_vehicles" value={preventive?.narcotics_seizure_vehicles} onChange={e => handleFormChange('preventive', e)} />
+              <FormInput label="Vehicles Seized" name="narcotics_seizure_vehicles" value={preventive?.narcotics_seizure_vehicles} onChange={e => handleFormChange('preventive',e)} />
             </FormSection>
 
-            {/* --- PART 2: Convictions --- */}
+            {/* PART 2: Convictions */}
             <FormSection title="Part 2: Convictions">
               <FormInput label="IPC Trial Completed" name="ipc_bns_trial_completed" value={convictions?.ipc_bns_trial_completed} onChange={e => handleFormChange('convictions', e)} />
               <FormInput label="IPC Conviction" name="ipc_bns_conviction" value={convictions?.ipc_bns_conviction} onChange={e => handleFormChange('convictions', e)} />
               <FormInput label="IPC Acquitted" name="ipc_bns_acquitted" value={convictions?.ipc_bns_acquitted} onChange={e => handleFormChange('convictions', e)} />
-              <FormInput label="SLL Trial Completed" name="sll_trial_completed" value={convictions?.sll_trial_completed} onChange={e => handleFormChange('convictions', e)} />
+              <FormInput label="SLL Trial Completed" name="sll_trial_completed" value={convictions?.sll_trial_completed} onChange={e => handleFormChange('convD:\Projects\CCTNS-Dashboard\cctns-frontend\src\pages\SPDashboard.jsxconvictions', e)} />
               <FormInput label="SLL Conviction" name="sll_conviction" value={convictions?.sll_conviction} onChange={e => handleFormChange('convictions', e)} />
               <FormInput label="Speedy Trial Convictions" name="speedy_trial_convictions" value={convictions?.speedy_trial_convictions} onChange={e => handleFormChange('convictions', e)} />
             </FormSection>
